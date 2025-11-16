@@ -50,53 +50,83 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>{isLogin ? t('auth.loginTitle') : t('auth.registerTitle')}</CardTitle>
-          <CardDescription>
-            {isLogin ? 'Entre na sua conta' : 'Crie uma nova conta'}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background p-4 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"></div>
+      </div>
+      
+      <Card className="w-full max-w-md relative z-10 shadow-2xl border-border/50 bg-card/95 backdrop-blur-xl animate-slide-up">
+        <CardHeader className="space-y-1 pb-6">
+          <div className="flex items-center justify-center mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-lg shadow-primary/20">
+              <span className="text-2xl">✓</span>
+            </div>
+          </div>
+          <CardTitle className="text-2xl text-center gradient-text">
+            {isLogin ? t('auth.loginTitle') : t('auth.registerTitle')}
+          </CardTitle>
+          <CardDescription className="text-center">
+            {isLogin ? 'Entre na sua conta para continuar' : 'Crie sua conta e comece a organizar suas tarefas'}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
-              <div>
-                <label className="text-sm font-medium mb-2 block">{t('common.name')}</label>
+              <div className="space-y-2 animate-in">
+                <label className="text-sm font-semibold text-foreground">{t('common.name')}</label>
                 <Input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required={!isLogin}
+                  className="h-11 border-border/50 focus:border-primary transition-colors"
+                  placeholder="Seu nome completo"
                 />
               </div>
             )}
-            <div>
-              <label className="text-sm font-medium mb-2 block">{t('common.email')}</label>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground">{t('common.email')}</label>
               <Input
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
+                className="h-11 border-border/50 focus:border-primary transition-colors"
+                placeholder="seu@email.com"
               />
             </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">{t('common.password')}</label>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground">{t('common.password')}</label>
               <Input
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
+                className="h-11 border-border/50 focus:border-primary transition-colors"
+                placeholder="••••••••"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? t('common.loading') : isLogin ? t('common.login') : t('common.register')}
+            <Button 
+              type="submit" 
+              className="w-full h-11 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white font-semibold shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-[1.02]" 
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  {t('common.loading')}
+                </span>
+              ) : (
+                isLogin ? t('common.login') : t('common.register')
+              )}
             </Button>
-            <div className="text-center text-sm">
+            <div className="text-center text-sm pt-2">
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-primary hover:underline"
+                className="text-primary hover:text-primary/80 font-medium transition-colors"
               >
                 {isLogin ? t('auth.dontHaveAccount') : t('auth.alreadyHaveAccount')}
               </button>

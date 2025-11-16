@@ -81,13 +81,23 @@ export default function PaymentPage() {
 
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold">{t('payment.title')}</h1>
+      <div className="max-w-2xl mx-auto space-y-8 animate-in">
+        <div>
+          <h1 className="text-4xl font-bold gradient-text mb-2">{t('payment.title')}</h1>
+          <p className="text-muted-foreground">Desbloqueie todos os recursos premium</p>
+        </div>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('payment.title')}</CardTitle>
-            <CardDescription>{t('payment.description')}</CardDescription>
+        <Card className="border-border/50 bg-gradient-to-br from-card to-card/50 shadow-xl">
+          <CardHeader className="pb-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg shadow-yellow-500/20">
+                <span className="text-2xl">⭐</span>
+              </div>
+              <div>
+                <CardTitle className="text-2xl">{t('payment.title')}</CardTitle>
+                <CardDescription className="text-base mt-1">{t('payment.description')}</CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
@@ -105,11 +115,11 @@ export default function PaymentPage() {
               </Select>
             </div>
 
-            <div className="bg-muted p-4 rounded-md">
-              <p className="text-sm text-muted-foreground mb-2">
+            <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20 p-4 rounded-lg">
+              <p className="text-sm text-foreground mb-2 font-medium">
                 Você será redirecionado para o checkout seguro do GGCheckout para finalizar o pagamento.
               </p>
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <ExternalLink className="w-4 h-4" />
                 <span>Pagamento seguro e criptografado</span>
               </div>
@@ -117,19 +127,19 @@ export default function PaymentPage() {
 
             <Button
               onClick={handleCreateCheckout}
-              className="w-full"
+              className="w-full h-12 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white font-semibold shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-[1.02]"
               disabled={loading}
             >
               {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <span className="flex items-center gap-2">
+                  <Loader2 className="w-5 h-5 animate-spin" />
                   {t('common.loading')}
-                </>
+                </span>
               ) : (
-                <>
-                  <ExternalLink className="w-4 h-4 mr-2" />
+                <span className="flex items-center gap-2">
+                  <ExternalLink className="w-5 h-5" />
                   {t('payment.payNow')}
-                </>
+                </span>
               )}
             </Button>
           </CardContent>

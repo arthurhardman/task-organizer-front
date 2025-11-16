@@ -77,99 +77,122 @@ export default function DashboardPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">{t('dashboard.title')}</h1>
-          <div className="flex gap-2">
+      <div className="space-y-8 animate-in">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold gradient-text mb-2">{t('dashboard.title')}</h1>
+            <p className="text-muted-foreground">Organize suas tarefas de forma eficiente</p>
+          </div>
+          <div className="flex gap-2 bg-muted/50 p-1 rounded-lg">
             <Button
-              variant={view === 'today' ? 'default' : 'outline'}
+              variant={view === 'today' ? 'default' : 'ghost'}
               onClick={() => setView('today')}
+              className={view === 'today' ? 'bg-primary shadow-lg shadow-primary/20' : ''}
             >
               {t('dashboard.today')}
             </Button>
             <Button
-              variant={view === 'week' ? 'default' : 'outline'}
+              variant={view === 'week' ? 'default' : 'ghost'}
               onClick={() => setView('week')}
+              className={view === 'week' ? 'bg-primary shadow-lg shadow-primary/20' : ''}
             >
               {t('dashboard.thisWeek')}
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="card-hover border-primary/20 bg-gradient-to-br from-card to-card/50">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <Calendar className="w-5 h-5 text-primary" />
+                </div>
                 {view === 'today' ? t('dashboard.today') : t('dashboard.thisWeek')}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{todayTasks.length}</div>
-              <p className="text-sm text-muted-foreground">Tarefas</p>
+              <div className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                {todayTasks.length}
+              </div>
+              <p className="text-sm text-muted-foreground mt-1">Tarefas</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <AlertCircle className="w-5 h-5 text-destructive" />
+          <Card className="card-hover border-destructive/20 bg-gradient-to-br from-card to-card/50">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <div className="p-2 rounded-lg bg-destructive/10">
+                  <AlertCircle className="w-5 h-5 text-destructive" />
+                </div>
                 {t('dashboard.overdue')}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-destructive">{overdueTasks.length}</div>
-              <p className="text-sm text-muted-foreground">Tarefas</p>
+              <div className="text-4xl font-bold text-destructive">{overdueTasks.length}</div>
+              <p className="text-sm text-muted-foreground mt-1">Tarefas</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-primary" />
+          <Card className="card-hover border-primary/20 bg-gradient-to-br from-card to-card/50">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <Clock className="w-5 h-5 text-primary" />
+                </div>
                 {t('dashboard.upcoming')}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-primary">{upcomingTasks.length}</div>
-              <p className="text-sm text-muted-foreground">Tarefas</p>
+              <div className="text-4xl font-bold text-primary">{upcomingTasks.length}</div>
+              <p className="text-sm text-muted-foreground mt-1">Tarefas</p>
             </CardContent>
           </Card>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('dashboard.today')}</CardTitle>
+          <Card className="card-hover border-primary/20">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-primary/10">
+                  <CheckCircle2 className="w-4 h-4 text-primary" />
+                </div>
+                {t('dashboard.today')}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {loading ? (
-                <p>{t('common.loading')}</p>
+                <div className="flex items-center justify-center py-8">
+                  <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+                </div>
               ) : todayTasks.length === 0 ? (
-                <p className="text-muted-foreground">{t('tasks.noTasks')}</p>
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">{t('tasks.noTasks')}</p>
+                </div>
               ) : (
-                <div className="space-y-2">
-                  {todayTasks.map((task) => (
+                <div className="space-y-3">
+                  {todayTasks.map((task, index) => (
                     <div
                       key={task.id}
-                      className="p-3 border rounded-md hover:bg-muted transition-colors"
+                      className="p-4 border border-border/50 rounded-lg hover:border-primary/50 hover:bg-muted/30 transition-all duration-200 animate-slide-up"
+                      style={{ animationDelay: `${index * 50}ms` }}
                     >
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-medium">{task.title}</h3>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-semibold text-foreground">{task.title}</h3>
                         <span
-                          className={`px-2 py-1 text-xs rounded ${
+                          className={`px-2.5 py-1 text-xs font-semibold rounded-full ${
                             task.priority === 'high'
-                              ? 'bg-red-500/20 text-red-500'
+                              ? 'bg-red-500/20 text-red-400 border border-red-500/30'
                               : task.priority === 'medium'
-                              ? 'bg-yellow-500/20 text-yellow-500'
-                              : 'bg-green-500/20 text-green-500'
+                              ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                              : 'bg-green-500/20 text-green-400 border border-green-500/30'
                           }`}
                         >
                           {task.priority}
                         </span>
                       </div>
                       {task.description && (
-                        <p className="text-sm text-muted-foreground mt-1">{task.description}</p>
+                        <p className="text-sm text-muted-foreground line-clamp-2">{task.description}</p>
                       )}
                     </div>
                   ))}
@@ -178,23 +201,31 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('dashboard.overdue')}</CardTitle>
+          <Card className="card-hover border-destructive/20">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-destructive/10">
+                  <AlertCircle className="w-4 h-4 text-destructive" />
+                </div>
+                {t('dashboard.overdue')}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {overdueTasks.length === 0 ? (
-                <p className="text-muted-foreground">Nenhuma tarefa atrasada</p>
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">✨ Nenhuma tarefa atrasada</p>
+                </div>
               ) : (
-                <div className="space-y-2">
-                  {overdueTasks.map((task) => (
+                <div className="space-y-3">
+                  {overdueTasks.map((task, index) => (
                     <div
                       key={task.id}
-                      className="p-3 border rounded-md hover:bg-muted transition-colors border-destructive"
+                      className="p-4 border border-destructive/30 rounded-lg bg-destructive/5 hover:bg-destructive/10 transition-all duration-200 animate-slide-up"
+                      style={{ animationDelay: `${index * 50}ms` }}
                     >
                       <div className="flex items-center justify-between">
-                        <h3 className="font-medium">{task.title}</h3>
-                        <span className="text-xs text-destructive">
+                        <h3 className="font-semibold text-foreground">{task.title}</h3>
+                        <span className="text-xs text-destructive font-medium bg-destructive/10 px-2 py-1 rounded">
                           {task.due_date && format(parseISO(task.due_date), 'dd/MM/yyyy')}
                         </span>
                       </div>

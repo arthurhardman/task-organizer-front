@@ -43,14 +43,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="border-b border-border bg-card sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-card/95">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <Link href="/dashboard" className="text-xl font-bold text-primary hover:opacity-80 transition-opacity">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <nav className="border-b border-border/50 bg-card/80 sticky top-0 z-40 backdrop-blur-xl supports-[backdrop-filter]:bg-card/60 shadow-sm">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <Link 
+              href="/dashboard" 
+              className="text-2xl font-bold gradient-text hover:opacity-90 transition-all duration-300"
+            >
               {t('common.appName')}
             </Link>
-            <div className="hidden md:flex gap-2">
+            <div className="hidden md:flex gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname?.includes(item.href);
@@ -58,10 +61,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors text-sm ${
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium ${
                       isActive
-                        ? 'bg-primary text-primary-foreground'
-                        : 'hover:bg-muted text-muted-foreground'
+                        ? 'bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/20'
+                        : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -77,38 +80,43 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowLangMenu(!showLangMenu)}
-                className="h-9 w-9"
+                className="h-10 w-10 rounded-full hover:bg-muted/50 transition-all"
               >
                 <Globe className="w-4 h-4" />
               </Button>
               {showLangMenu && (
-                <div className="absolute right-0 mt-2 w-32 bg-card border border-border rounded-md shadow-lg z-50 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-36 bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl z-50 overflow-hidden animate-in">
                   <button
                     onClick={() => changeLanguage('pt')}
-                    className="w-full text-left px-4 py-2 hover:bg-muted transition-colors"
+                    className="w-full text-left px-4 py-2.5 hover:bg-muted/50 transition-colors text-sm"
                   >
-                    Português
+                    🇧🇷 Português
                   </button>
                   <button
                     onClick={() => changeLanguage('en')}
-                    className="w-full text-left px-4 py-2 hover:bg-muted transition-colors"
+                    className="w-full text-left px-4 py-2.5 hover:bg-muted/50 transition-colors text-sm"
                   >
-                    English
+                    🇺🇸 English
                   </button>
                   <button
                     onClick={() => changeLanguage('es')}
-                    className="w-full text-left px-4 py-2 hover:bg-muted transition-colors"
+                    className="w-full text-left px-4 py-2.5 hover:bg-muted/50 transition-colors text-sm"
                   >
-                    Español
+                    🇪🇸 Español
                   </button>
                 </div>
               )}
             </div>
-            <div className="hidden sm:flex items-center gap-2">
-              <span className="text-sm font-medium">{user?.name}</span>
+            <div className="hidden sm:flex items-center gap-3 px-3 py-1.5 rounded-full bg-muted/30">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+                  {user?.name?.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-sm font-medium">{user?.name}</span>
+              </div>
               {user?.isPremium && (
-                <span className="px-2 py-1 bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 text-xs font-semibold rounded-full">
-                  Premium
+                <span className="px-2.5 py-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 text-yellow-900 text-xs font-bold rounded-full shadow-lg shadow-yellow-500/20">
+                  ⭐ Premium
                 </span>
               )}
             </div>
@@ -116,7 +124,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               variant="ghost" 
               size="icon" 
               onClick={handleLogout}
-              className="h-9 w-9"
+              className="h-10 w-10 rounded-full hover:bg-destructive/10 hover:text-destructive transition-all"
               title={t('common.logout')}
             >
               <LogOut className="w-4 h-4" />
@@ -124,7 +132,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </nav>
-      <main className="container mx-auto px-4 py-6 sm:py-8">{children}</main>
+      <main className="container mx-auto px-4 py-8 sm:py-10">{children}</main>
     </div>
   );
 }

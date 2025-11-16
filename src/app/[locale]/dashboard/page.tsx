@@ -9,7 +9,7 @@ import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { format, startOfWeek, endOfWeek, isToday, isPast, parseISO } from 'date-fns';
 import { Calendar, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
-import Link from 'next/link';
+import { Link, useRouter } from '@/i18n/routing';
 
 interface Task {
   id: number;
@@ -22,16 +22,19 @@ interface Task {
 
 export default function DashboardPage() {
   const t = useTranslations();
+  const router = useRouter();
   const { user } = useAuthStore();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'today' | 'week'>('today');
 
   useEffect(() => {
-    if (user) {
-      fetchTasks();
+    if (!user) {
+      router.push('/login');
+      return;
     }
-  }, [user, view]);
+    fetchTasks();
+  }, [user, view, router]);
 
   const fetchTasks = async () => {
     try {
@@ -69,18 +72,7 @@ export default function DashboardPage() {
   });
 
   if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card>
-          <CardContent className="p-6">
-            <p>Por favor, faça login</p>
-            <Link href="/login">
-              <Button>Login</Button>
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return null; // Será redirecionado pelo useEffect
   }
 
   return (

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,7 @@ import { CheckCircle2, Loader2, ExternalLink } from 'lucide-react';
 
 export default function PaymentPage() {
   const t = useTranslations();
+  const router = useRouter();
   const { user, updateUser } = useAuthStore();
   const [installments, setInstallments] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -67,14 +69,14 @@ export default function PaymentPage() {
     );
   }
 
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
   if (!user) {
-    return (
-      <Layout>
-        <div className="min-h-screen flex items-center justify-center">
-          <p>Por favor, faça login</p>
-        </div>
-      </Layout>
-    );
+    return null; // Será redirecionado pelo useEffect
   }
 
   return (

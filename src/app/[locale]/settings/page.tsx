@@ -2,16 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 
 export default function SettingsPage() {
   const t = useTranslations();
+  const router = useRouter();
   const { user, updateUser } = useAuthStore();
   const [language, setLanguage] = useState(user?.language || 'pt');
   const [loading, setLoading] = useState(false);
@@ -29,12 +31,14 @@ export default function SettingsPage() {
     }
   };
 
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
   if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Por favor, faça login</p>
-      </div>
-    );
+    return null; // Será redirecionado pelo useEffect
   }
 
   return (

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -27,6 +28,7 @@ const columns = [
 
 export default function KanbanPage() {
   const t = useTranslations();
+  const router = useRouter();
   const { user } = useAuthStore();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,10 +36,12 @@ export default function KanbanPage() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   useEffect(() => {
-    if (user) {
-      fetchTasks();
+    if (!user) {
+      router.push('/login');
+      return;
     }
-  }, [user]);
+    fetchTasks();
+  }, [user, router]);
 
   const fetchTasks = async () => {
     try {
@@ -99,11 +103,7 @@ export default function KanbanPage() {
   };
 
   if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Por favor, faça login</p>
-      </div>
-    );
+    return null; // Será redirecionado pelo useEffect
   }
 
   return (

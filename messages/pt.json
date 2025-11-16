@@ -1,0 +1,74 @@
+{
+  "common": {
+    "appName": "Task Organizer",
+    "login": "Entrar",
+    "register": "Registrar",
+    "logout": "Sair",
+    "email": "E-mail",
+    "password": "Senha",
+    "name": "Nome",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "create": "Criar",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso"
+  },
+  "auth": {
+    "loginTitle": "Faça login na sua conta",
+    "registerTitle": "Crie sua conta",
+    "alreadyHaveAccount": "Já tem uma conta?",
+    "dontHaveAccount": "Não tem uma conta?",
+    "forgotPassword": "Esqueceu a senha?"
+  },
+  "tasks": {
+    "title": "Tarefas",
+    "createTask": "Criar Tarefa",
+    "editTask": "Editar Tarefa",
+    "taskTitle": "Título",
+    "description": "Descrição",
+    "status": "Status",
+    "priority": "Prioridade",
+    "dueDate": "Data de Vencimento",
+    "todo": "A Fazer",
+    "inProgress": "Em Progresso",
+    "done": "Concluída",
+    "low": "Baixa",
+    "medium": "Média",
+    "high": "Alta",
+    "noTasks": "Nenhuma tarefa encontrada"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "today": "Hoje",
+    "thisWeek": "Esta Semana",
+    "upcoming": "Próximas",
+    "overdue": "Atrasadas"
+  },
+  "kanban": {
+    "title": "Kanban",
+    "todo": "A Fazer",
+    "inProgress": "Em Progresso",
+    "done": "Concluída"
+  },
+  "lists": {
+    "title": "Listas"
+  },
+  "payment": {
+    "title": "Assinatura Premium",
+    "description": "Desbloqueie todos os recursos por apenas R$ 250,00",
+    "installments": "Parcelas",
+    "payNow": "Pagar Agora",
+    "premiumRequired": "Recurso Premium",
+    "upgradeMessage": "Faça upgrade para acessar este recurso"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "kanban": "Kanban",
+    "lists": "Listas",
+    "settings": "Configurações"
+  }
+}
+

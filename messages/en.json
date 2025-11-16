@@ -1,0 +1,74 @@
+{
+  "common": {
+    "appName": "Task Organizer",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "auth": {
+    "loginTitle": "Login to your account",
+    "registerTitle": "Create your account",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "forgotPassword": "Forgot password?"
+  },
+  "tasks": {
+    "title": "Tasks",
+    "createTask": "Create Task",
+    "editTask": "Edit Task",
+    "taskTitle": "Title",
+    "description": "Description",
+    "status": "Status",
+    "priority": "Priority",
+    "dueDate": "Due Date",
+    "todo": "To Do",
+    "inProgress": "In Progress",
+    "done": "Done",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "noTasks": "No tasks found"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "upcoming": "Upcoming",
+    "overdue": "Overdue"
+  },
+  "kanban": {
+    "title": "Kanban",
+    "todo": "To Do",
+    "inProgress": "In Progress",
+    "done": "Done"
+  },
+  "lists": {
+    "title": "Lists"
+  },
+  "payment": {
+    "title": "Premium Subscription",
+    "description": "Unlock all features for just R$ 250.00",
+    "installments": "Installments",
+    "payNow": "Pay Now",
+    "premiumRequired": "Premium Feature",
+    "upgradeMessage": "Upgrade to access this feature"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "kanban": "Kanban",
+    "lists": "Lists",
+    "settings": "Settings"
+  }
+}
+

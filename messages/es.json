@@ -1,0 +1,74 @@
+{
+  "common": {
+    "appName": "Task Organizer",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "name": "Nombre",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito"
+  },
+  "auth": {
+    "loginTitle": "Inicia sesión en tu cuenta",
+    "registerTitle": "Crea tu cuenta",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "forgotPassword": "¿Olvidaste tu contraseña?"
+  },
+  "tasks": {
+    "title": "Tareas",
+    "createTask": "Crear Tarea",
+    "editTask": "Editar Tarea",
+    "taskTitle": "Título",
+    "description": "Descripción",
+    "status": "Estado",
+    "priority": "Prioridad",
+    "dueDate": "Fecha de Vencimiento",
+    "todo": "Por Hacer",
+    "inProgress": "En Progreso",
+    "done": "Hecho",
+    "low": "Baja",
+    "medium": "Media",
+    "high": "Alta",
+    "noTasks": "No se encontraron tareas"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "today": "Hoy",
+    "thisWeek": "Esta Semana",
+    "upcoming": "Próximas",
+    "overdue": "Atrasadas"
+  },
+  "kanban": {
+    "title": "Kanban",
+    "todo": "Por Hacer",
+    "inProgress": "En Progreso",
+    "done": "Hecho"
+  },
+  "lists": {
+    "title": "Listas"
+  },
+  "payment": {
+    "title": "Suscripción Premium",
+    "description": "Desbloquea todas las funciones por solo R$ 250,00",
+    "installments": "Cuotas",
+    "payNow": "Pagar Ahora",
+    "premiumRequired": "Función Premium",
+    "upgradeMessage": "Actualiza para acceder a esta función"
+  },
+  "navigation": {
+    "dashboard": "Panel",
+    "kanban": "Kanban",
+    "lists": "Listas",
+    "settings": "Configuración"
+  }
+}
+

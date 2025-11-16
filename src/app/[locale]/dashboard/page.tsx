@@ -55,16 +55,22 @@ export default function DashboardPage() {
     }
   };
 
+  // Tarefas de hoje (incluindo tarefas sem data)
   const todayTasks = tasks.filter((task) => {
-    if (!task.due_date) return false;
+    if (!task.due_date) {
+      // Incluir tarefas sem data na contagem
+      return true;
+    }
     return isToday(parseISO(task.due_date));
   });
 
+  // Tarefas atrasadas (apenas com data)
   const overdueTasks = tasks.filter((task) => {
     if (!task.due_date) return false;
     return isPast(parseISO(task.due_date)) && task.status !== 'done';
   });
 
+  // Tarefas futuras (apenas com data futura, excluindo tarefas sem data)
   const upcomingTasks = tasks.filter((task) => {
     if (!task.due_date) return false;
     const taskDate = parseISO(task.due_date);

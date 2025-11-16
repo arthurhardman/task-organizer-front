@@ -1,11 +1,11 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname, Link } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { LayoutDashboard, Columns, List, Settings, LogOut, Globe } from 'lucide-react';
-import { useState, useEffect } from 'react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const t = useTranslations();

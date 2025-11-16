@@ -6,6 +6,7 @@ import { useRouter, usePathname, Link } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { LayoutDashboard, Columns, List, Settings, LogOut, Globe } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const t = useTranslations();
@@ -77,6 +78,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <div className="relative">
               <Button
                 variant="ghost"

@@ -140,7 +140,7 @@ export default function ListsPage() {
                       name="title"
                       type="text"
                       defaultValue={editingTask?.title}
-                      className="w-full px-4 py-2.5 border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                      className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
                       required
                       placeholder="Nome da tarefa"
                     />
@@ -150,7 +150,7 @@ export default function ListsPage() {
                     <textarea
                       name="description"
                       defaultValue={editingTask?.description || ''}
-                      className="w-full px-4 py-2.5 border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                      className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none placeholder:text-muted-foreground"
                       rows={3}
                       placeholder="Descrição da tarefa (opcional)"
                     />
@@ -161,7 +161,7 @@ export default function ListsPage() {
                       <select
                         name="priority"
                         defaultValue={editingTask?.priority || 'medium'}
-                        className="w-full px-4 py-2.5 border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                        className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                       >
                         <option value="low">{t('tasks.low')}</option>
                         <option value="medium">{t('tasks.medium')}</option>
@@ -174,7 +174,7 @@ export default function ListsPage() {
                         name="due_date"
                         type="date"
                         defaultValue={editingTask?.due_date ? editingTask.due_date.split('T')[0] : ''}
-                        className="w-full px-4 py-2.5 border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                        className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                       />
                     </div>
                   </div>
@@ -184,7 +184,7 @@ export default function ListsPage() {
                       <select
                         name="status"
                         defaultValue={editingTask.status}
-                        className="w-full px-4 py-2.5 border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                        className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                       >
                         <option value="todo">{t('tasks.todo')}</option>
                         <option value="inProgress">{t('tasks.inProgress')}</option>

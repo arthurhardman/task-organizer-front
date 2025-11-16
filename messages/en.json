@@ -58,8 +58,7 @@
   },
   "payment": {
     "title": "Premium Subscription",
-    "description": "Unlock all features for just R$ 250.00",
-    "installments": "Installments",
+    "description": "Unlock all features for just R$ 25.00/month",
     "payNow": "Pay Now",
     "premiumRequired": "Premium Feature",
     "upgradeMessage": "Upgrade to access this feature"

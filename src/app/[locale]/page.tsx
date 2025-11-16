@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 
-export default function HomePage({ params }: { params: { locale: string } }) {
+export default function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const router = useRouter();
   const { user } = useAuthStore();
 

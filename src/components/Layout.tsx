@@ -30,8 +30,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }
 
   const changeLanguage = (lang: string) => {
-    const currentPath = pathname?.replace(/^\/(pt|en|es)/, '') || '';
-    router.push(`/${lang}${currentPath}`);
+    // O pathname do next-intl já não inclui o locale
+    const currentPath = pathname || '/dashboard';
+    // Usar window.location para garantir que o locale seja atualizado corretamente
+    window.location.href = `/${lang}${currentPath === '/' ? '' : currentPath}`;
     setShowLangMenu(false);
   };
 

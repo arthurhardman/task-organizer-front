@@ -58,8 +58,7 @@
   },
   "payment": {
     "title": "Assinatura Premium",
-    "description": "Desbloqueie todos os recursos por apenas R$ 250,00",
-    "installments": "Parcelas",
+    "description": "Desbloqueie todos os recursos por apenas R$ 25,00/mês",
     "payNow": "Pagar Agora",
     "premiumRequired": "Recurso Premium",
     "upgradeMessage": "Faça upgrade para acessar este recurso"

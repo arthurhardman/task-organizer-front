@@ -6,35 +6,24 @@ import { useRouter } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { CheckCircle2, Loader2, ExternalLink } from 'lucide-react';
+
+const CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/RNCPqNAHkEGRn21iIW2s';
 
 export default function PaymentPage() {
   const t = useTranslations();
   const router = useRouter();
   const { user, updateUser } = useAuthStore();
-  const [installments, setInstallments] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
 
-  const handleCreateCheckout = async () => {
+  const handleRedirectToCheckout = () => {
     if (!user) return;
-
+    
     setLoading(true);
-    try {
-      const response = await api.post('/payments/create-checkout', { installments });
-      setCheckoutUrl(response.data.checkout_url);
-      
-      // Redirecionar para o checkout do GGCheckout
-      if (response.data.checkout_url) {
-        window.location.href = response.data.checkout_url;
-      }
-    } catch (error: any) {
-      alert('Erro ao criar checkout: ' + (error.response?.data?.error || error.message));
-      setLoading(false);
-    }
+    // Redirecionar diretamente para o checkout do GGCheckout
+    window.location.href = CHECKOUT_URL;
   };
 
   // Verificar status do pagamento ao retornar
@@ -51,7 +40,7 @@ export default function PaymentPage() {
         })
         .catch(console.error);
     }
-  }, []);
+  }, [updateUser]);
 
   if (user?.isPremium) {
     return (
@@ -100,22 +89,22 @@ export default function PaymentPage() {
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div>
-              <label className="text-sm font-medium mb-2 block">{t('payment.installments')}</label>
-              <Select
-                value={installments}
-                onChange={(e) => setInstallments(Number(e.target.value))}
-                disabled={loading}
-              >
-                <option value="1">1x de R$ 250,00</option>
-                <option value="2">2x de R$ 125,00</option>
-                <option value="3">3x de R$ 83,33</option>
-                <option value="4">4x de R$ 62,50</option>
-                <option value="5">5x de R$ 50,00</option>
-              </Select>
+            <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20 p-6 rounded-lg">
+              <div className="text-center mb-4">
+                <div className="text-4xl font-bold gradient-text mb-2">R$ 25,00</div>
+                <p className="text-muted-foreground">por mês</p>
+              </div>
+              <div className="space-y-2 text-sm text-foreground">
+                <p className="font-medium">✨ Recursos Premium:</p>
+                <ul className="list-disc list-inside space-y-1 text-muted-foreground ml-2">
+                  <li>Acesso ilimitado a todas as funcionalidades</li>
+                  <li>Suporte prioritário</li>
+                  <li>Atualizações exclusivas</li>
+                </ul>
+              </div>
             </div>
 
-            <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20 p-4 rounded-lg">
+            <div className="bg-muted/30 border border-border/50 p-4 rounded-lg">
               <p className="text-sm text-foreground mb-2 font-medium">
                 Você será redirecionado para o checkout seguro do GGCheckout para finalizar o pagamento.
               </p>
@@ -126,8 +115,8 @@ export default function PaymentPage() {
             </div>
 
             <Button
-              onClick={handleCreateCheckout}
-              className="w-full h-12 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white font-semibold shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-[1.02]"
+              onClick={handleRedirectToCheckout}
+              className="w-full h-14 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white font-semibold text-lg shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-[1.02]"
               disabled={loading}
             >
               {loading ? (

@@ -8,28 +8,31 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
-import { Plus, Trash2, Edit, Lock, Sparkles } from 'lucide-react';
+import { Plus, Trash2, Edit, Lock, Sparkles, Settings } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { toast } from '@/components/ui/toast';
 import { PlansModal } from '@/components/PlansModal';
 import { ConfirmModal } from '@/components/ConfirmModal';
+import { KanbanColumnsConfig } from '@/components/KanbanColumnsConfig';
 
 interface Task {
   id: number;
   title: string;
   description: string;
-  status: 'todo' | 'inProgress' | 'done';
+  status: string;
   priority: string;
   due_date: string | null;
   due_time: string | null;
   position: number;
 }
 
-const columns = [
-  { id: 'todo', label: 'kanban.todo' },
-  { id: 'inProgress', label: 'kanban.inProgress' },
-  { id: 'done', label: 'kanban.done' },
-];
+interface KanbanColumn {
+  id: number;
+  name: string;
+  status_id: string;
+  position: number;
+  color: string;
+}
 
 export default function KanbanPage() {
   const t = useTranslations();
@@ -43,6 +46,9 @@ export default function KanbanPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [columns, setColumns] = useState<KanbanColumn[]>([]);
+  const [loadingColumns, setLoadingColumns] = useState(true);
+  const [showColumnsConfig, setShowColumnsConfig] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -50,8 +56,21 @@ export default function KanbanPage() {
       return;
     }
     fetchTasks();
+    fetchColumns();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]); // Removido router das dependências
+
+  const fetchColumns = async () => {
+    try {
+      setLoadingColumns(true);
+      const response = await api.get('/kanban/columns');
+      setColumns(response.data);
+    } catch (error) {
+      console.error('Error fetching columns:', error);
+    } finally {
+      setLoadingColumns(false);
+    }
+  };
 
   const fetchTasks = async () => {
     try {
@@ -136,7 +155,7 @@ export default function KanbanPage() {
     const taskData = {
       title: formData.get('title'),
       description: formData.get('description'),
-      status: formData.get('status') || 'todo',
+      status: formData.get('status') || (columns.length > 0 ? columns[0].status_id : 'todo'),
       priority: formData.get('priority') || 'medium',
       due_date: formData.get('due_date') || null,
       due_time: formData.get('due_time') || null,
@@ -208,22 +227,43 @@ export default function KanbanPage() {
                   {t('tasks.createTask')}
                 </Button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {columns.map((column) => (
-                  <Card key={column.id} className="border-border/50 bg-gradient-to-br from-card to-card/50 min-h-[500px]">
-                    <CardHeader className="pb-4">
-                      <CardTitle className="flex items-center gap-2 text-lg">
-                        {t(column.label)}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-center py-8 text-muted-foreground">
-                        {t('tasks.noTasks')}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              {loadingColumns ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+                </div>
+              ) : columns.length === 0 ? (
+                <Card className="border-border/50 bg-gradient-to-br from-card to-card/50">
+                  <CardContent className="p-8 text-center">
+                    <p className="text-muted-foreground mb-4">
+                      {t('kanban.noColumns') || 'Nenhuma coluna configurada. Configure suas colunas para começar.'}
+                    </p>
+                    <Button onClick={() => setShowColumnsConfig(true)}>
+                      <Settings className="w-4 h-4 mr-2" />
+                      {t('kanban.configureColumns') || 'Configurar Colunas'}
+                    </Button>
+                  </CardContent>
+                </Card>
+              ) : (
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {columns.map((column) => (
+                    <Card key={column.id} className="border-border/50 bg-gradient-to-br from-card to-card/50 min-h-[500px]">
+                      <CardHeader className="pb-4">
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <div className="p-2 rounded-lg" style={{ backgroundColor: `${column.color}20` }}>
+                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: column.color }}></div>
+                          </div>
+                          {column.name}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-center py-8 text-muted-foreground">
+                          {t('tasks.noTasks')}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -287,13 +327,23 @@ export default function KanbanPage() {
             <h1 className="text-4xl font-bold gradient-text mb-2">{t('kanban.title')}</h1>
             <p className="text-muted-foreground">{t('kanban.description')}</p>
           </div>
-          <Button 
-            onClick={() => setShowCreateModal(true)}
-            className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-105"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            {t('tasks.createTask')}
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline"
+              onClick={() => setShowColumnsConfig(true)}
+              className="border-border/50"
+            >
+              <Settings className="w-4 h-4 mr-2" />
+              {t('kanban.configureColumns') || 'Configurar Colunas'}
+            </Button>
+            <Button 
+              onClick={() => setShowCreateModal(true)}
+              className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-105"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              {t('tasks.createTask')}
+            </Button>
+          </div>
         </div>
 
         {showCreateModal && (
@@ -375,12 +425,14 @@ export default function KanbanPage() {
                       <label className="text-sm font-semibold text-foreground">{t('tasks.status')}</label>
                       <select
                         name="status"
-                        defaultValue={editingTask.status}
+                        defaultValue={editingTask?.status || (columns.length > 0 ? columns[0].status_id : 'todo')}
                         className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                       >
-                        <option value="todo">{t('tasks.todo')}</option>
-                        <option value="inProgress">{t('tasks.inProgress')}</option>
-                        <option value="done">{t('tasks.done')}</option>
+                        {columns.map((col) => (
+                          <option key={col.id} value={col.status_id}>
+                            {col.name}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   )}
@@ -409,29 +461,40 @@ export default function KanbanPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {columns.map((column, colIndex) => {
-            const columnTasks = getTasksByStatus(column.id);
-            return (
-              <div key={column.id} className="space-y-4">
-                <Card className="border-border/50 bg-gradient-to-br from-card to-card/50">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="flex items-center gap-2 text-lg">
-                      <div className={`p-2 rounded-lg ${
-                        column.id === 'todo' ? 'bg-blue-500/10' :
-                        column.id === 'inProgress' ? 'bg-yellow-500/10' :
-                        'bg-green-500/10'
-                      }`}>
-                        {column.id === 'todo' && <div className="w-3 h-3 rounded-full bg-blue-500"></div>}
-                        {column.id === 'inProgress' && <div className="w-3 h-3 rounded-full bg-yellow-500"></div>}
-                        {column.id === 'done' && <div className="w-3 h-3 rounded-full bg-green-500"></div>}
-                      </div>
-                      {t(column.label)}
-                      <span className="ml-auto text-sm font-normal text-muted-foreground bg-muted px-2 py-1 rounded-full">
-                        {columnTasks.length}
-                      </span>
-                    </CardTitle>
-                  </CardHeader>
+        {loadingColumns ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+          </div>
+        ) : columns.length === 0 ? (
+          <Card className="border-border/50 bg-gradient-to-br from-card to-card/50">
+            <CardContent className="p-8 text-center">
+              <p className="text-muted-foreground mb-4">
+                {t('kanban.noColumns') || 'Nenhuma coluna configurada. Configure suas colunas para começar.'}
+              </p>
+              <Button onClick={() => setShowColumnsConfig(true)}>
+                <Settings className="w-4 h-4 mr-2" />
+                {t('kanban.configureColumns') || 'Configurar Colunas'}
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {columns.map((column, colIndex) => {
+              const columnTasks = getTasksByStatus(column.status_id);
+              return (
+                <div key={column.id} className="space-y-4">
+                  <Card className="border-border/50 bg-gradient-to-br from-card to-card/50">
+                    <CardHeader className="pb-4">
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <div className="p-2 rounded-lg" style={{ backgroundColor: `${column.color}20` }}>
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: column.color }}></div>
+                        </div>
+                        {column.name}
+                        <span className="ml-auto text-sm font-normal text-muted-foreground bg-muted px-2 py-1 rounded-full">
+                          {columnTasks.length}
+                        </span>
+                      </CardTitle>
+                    </CardHeader>
                   <CardContent className="space-y-3 min-h-[500px]">
                     {columnTasks.map((task, index) => (
                       <Card
@@ -442,15 +505,12 @@ export default function KanbanPage() {
                         onDragEnd={(e) => {
                           const rect = e.currentTarget.getBoundingClientRect();
                           const x = e.clientX;
-                          const columnWidth = window.innerWidth / 3;
-                          const newStatus =
-                            x < columnWidth
-                              ? 'todo'
-                              : x < columnWidth * 2
-                              ? 'inProgress'
-                              : 'done';
-                          if (newStatus !== task.status) {
-                            handleStatusChange(task.id, newStatus);
+                          const columnWidth = window.innerWidth / columns.length;
+                          const columnIndex = Math.floor(x / columnWidth);
+                          const targetColumn = columns[Math.min(columnIndex, columns.length - 1)];
+                          
+                          if (targetColumn && targetColumn.status_id !== task.status) {
+                            handleStatusChange(task.id, targetColumn.status_id);
                           }
                         }}
                       >
@@ -508,7 +568,8 @@ export default function KanbanPage() {
               </div>
             );
           })}
-        </div>
+          </div>
+        )}
       </div>
       <PlansModal 
         isOpen={showPlansModal} 
@@ -528,6 +589,14 @@ export default function KanbanPage() {
         cancelText={t('common.cancel')}
         variant="destructive"
         loading={deleting}
+      />
+      <KanbanColumnsConfig
+        isOpen={showColumnsConfig}
+        onClose={() => setShowColumnsConfig(false)}
+        onColumnsUpdated={() => {
+          fetchColumns();
+          fetchTasks();
+        }}
       />
     </Layout>
   );

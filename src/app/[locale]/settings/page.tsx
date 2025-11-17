@@ -10,7 +10,30 @@ import { Select } from '@/components/ui/select';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Link } from '@/i18n/routing';
-import { Globe } from 'lucide-react';
+import { Globe, CreditCard, Calendar, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { format } from 'date-fns';
+
+interface PaymentHistoryItem {
+  id: number;
+  checkoutId: string;
+  status: string;
+  amount: number;
+  currency: string;
+  installments: number;
+  expiresAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  isExpired: boolean;
+}
+
+interface SubscriptionStatus {
+  isPremium: boolean;
+  subscription: {
+    expires_at: string | null;
+    isExpired: boolean;
+    daysUntilExpiry: number | null;
+  } | null;
+}
 
 export default function SettingsPage() {
   const t = useTranslations();
@@ -18,6 +41,9 @@ export default function SettingsPage() {
   const { user, updateUser } = useAuthStore();
   const [language, setLanguage] = useState(user?.language || 'pt');
   const [loading, setLoading] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<SubscriptionStatus | null>(null);
+  const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryItem[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(true);
 
   const handleLanguageChange = async (newLanguage: string) => {
     setLanguage(newLanguage);
@@ -35,8 +61,36 @@ export default function SettingsPage() {
   useEffect(() => {
     if (!user) {
       router.push('/login');
+      return;
     }
+    fetchSubscriptionStatus();
+    fetchPaymentHistory();
   }, [user, router]);
+
+  const fetchSubscriptionStatus = async () => {
+    try {
+      const response = await api.get('/payments/status');
+      setSubscriptionStatus(response.data);
+      // Atualizar status premium no store
+      if (response.data.isPremium !== user?.isPremium) {
+        updateUser({ isPremium: response.data.isPremium });
+      }
+    } catch (error) {
+      console.error('Error fetching subscription status:', error);
+    }
+  };
+
+  const fetchPaymentHistory = async () => {
+    try {
+      setLoadingHistory(true);
+      const response = await api.get('/payments/history');
+      setPaymentHistory(response.data.history || []);
+    } catch (error) {
+      console.error('Error fetching payment history:', error);
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
 
   if (!user) {
     return null; // Será redirecionado pelo useEffect
@@ -75,7 +129,7 @@ export default function SettingsPage() {
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2">
               <span className="text-2xl">⭐</span>
-              Assinatura
+              Assinatura Premium
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -83,7 +137,7 @@ export default function SettingsPage() {
               <div className="p-4 rounded-lg bg-muted/30">
                 <p className="text-sm text-muted-foreground mb-2">Status</p>
                 <p className="font-semibold text-lg">
-                  {user.isPremium ? (
+                  {subscriptionStatus?.isPremium ? (
                     <span className="flex items-center gap-2">
                       <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-yellow-900 text-sm font-bold rounded-full">
                         ⭐ Premium Ativo
@@ -94,14 +148,120 @@ export default function SettingsPage() {
                   )}
                 </p>
               </div>
-              {!user.isPremium && (
+              
+              {subscriptionStatus?.subscription && (
+                <div className="p-4 rounded-lg bg-muted/30 space-y-2">
+                  {subscriptionStatus.subscription.expires_at && (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-muted-foreground">Expira em:</p>
+                        <p className="font-semibold">
+                          {subscriptionStatus.subscription.isExpired ? (
+                            <span className="text-destructive flex items-center gap-1">
+                              <XCircle className="w-4 h-4" />
+                              Expirada
+                            </span>
+                          ) : subscriptionStatus.subscription.daysUntilExpiry !== null ? (
+                            <span className="text-primary flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              {subscriptionStatus.subscription.daysUntilExpiry} {subscriptionStatus.subscription.daysUntilExpiry === 1 ? 'dia' : 'dias'}
+                            </span>
+                          ) : (
+                            <span className="text-muted-foreground">-</span>
+                          )}
+                        </p>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {format(new Date(subscriptionStatus.subscription.expires_at), "dd/MM/yyyy 'às' HH:mm")}
+                      </p>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {(!subscriptionStatus?.isPremium || subscriptionStatus?.subscription?.isExpired) && (
                 <Link href="/payment">
                   <Button className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg shadow-primary/20">
-                    Fazer Upgrade para Premium
+                    {subscriptionStatus?.subscription?.isExpired ? 'Renovar Assinatura' : 'Fazer Upgrade para Premium'}
                   </Button>
                 </Link>
               )}
             </div>
+          </CardContent>
+        </Card>
+
+        <Card className="card-hover border-border/50 bg-gradient-to-br from-card to-card/50">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2">
+              <CreditCard className="w-5 h-5 text-primary" />
+              Histórico de Pagamentos
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loadingHistory ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+              </div>
+            ) : paymentHistory.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-muted-foreground">Nenhum pagamento encontrado</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {paymentHistory.map((payment) => (
+                  <div
+                    key={payment.id}
+                    className="p-4 border border-border/50 rounded-lg hover:border-primary/50 hover:bg-muted/30 transition-all duration-200"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        {payment.status === 'active' && !payment.isExpired ? (
+                          <CheckCircle2 className="w-5 h-5 text-green-500" />
+                        ) : (
+                          <XCircle className="w-5 h-5 text-destructive" />
+                        )}
+                        <span className="font-semibold">
+                          R$ {(payment.amount / 100).toFixed(2).replace('.', ',')}
+                        </span>
+                      </div>
+                      <span
+                        className={`px-2.5 py-1 text-xs font-semibold rounded-full ${
+                          payment.status === 'active' && !payment.isExpired
+                            ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                            : payment.isExpired
+                            ? 'bg-destructive/20 text-destructive border border-destructive/30'
+                            : 'bg-muted text-muted-foreground'
+                        }`}
+                      >
+                        {payment.status === 'active' && !payment.isExpired
+                          ? 'Ativo'
+                          : payment.isExpired
+                          ? 'Expirado'
+                          : payment.status}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        <span>
+                          {format(new Date(payment.createdAt), 'dd/MM/yyyy')}
+                        </span>
+                      </div>
+                      {payment.expiresAt && (
+                        <span>
+                          Expira: {format(new Date(payment.expiresAt), 'dd/MM/yyyy')}
+                        </span>
+                      )}
+                    </div>
+                    {payment.checkoutId && (
+                      <p className="text-xs text-muted-foreground mt-2 font-mono">
+                        ID: {payment.checkoutId.substring(0, 20)}...
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 

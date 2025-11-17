@@ -7,18 +7,34 @@ import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { LayoutDashboard, Columns, List, Settings, LogOut, Globe } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import api from '@/lib/api';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const t = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
-  const { user, logout } = useAuthStore();
+  const { user, logout, updateUser } = useAuthStore();
   const [showLangMenu, setShowLangMenu] = useState(false);
 
   useEffect(() => {
     if (!user) {
       router.push('/login');
+      return;
     }
+    
+    // Verificar status premium ao carregar (para atualizar se expirou)
+    const checkPremiumStatus = async () => {
+      try {
+        const response = await api.get('/payments/status');
+        if (response.data.isPremium !== user.isPremium) {
+          updateUser({ isPremium: response.data.isPremium });
+        }
+      } catch (error) {
+        console.error('Error checking premium status:', error);
+      }
+    };
+    
+    checkPremiumStatus();
   }, [user, router]);
 
   const handleLogout = () => {

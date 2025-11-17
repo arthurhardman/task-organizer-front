@@ -234,10 +234,10 @@ export default function KanbanPage() {
                     <div className="flex items-center justify-center gap-2">
                       <Sparkles className="w-5 h-5 text-primary" />
                       <span className="text-2xl font-bold gradient-text">R$ 39,90</span>
-                      <span className="text-muted-foreground">/mês</span>
+                      <span className="text-muted-foreground">{t('payment.perMonth')}</span>
                     </div>
                     <ul className="text-sm text-muted-foreground space-y-1 text-left">
-                      <li>✨ Acesso ilimitado ao Kanban</li>
+                      <li>✨ {t('kanban.unlimitedKanbanAccess')}</li>
                       <li>✨ {t('kanban.noCreditLimit')}</li>
                       <li>✨ {t('kanban.allPremiumFeatures')}</li>
                     </ul>

@@ -71,7 +71,8 @@
     "done": "Done",
     "description": "Organize your tasks in columns",
     "allPremiumFeatures": "All premium features",
-    "noCreditLimit": "No credit limit"
+    "noCreditLimit": "No credit limit",
+    "unlimitedKanbanAccess": "Unlimited Kanban access"
   },
   "lists": {
     "title": "Lists",
@@ -147,7 +148,18 @@
     "tasksByDay": "Tasks Created by Day",
     "completedByDay": "Tasks Completed by Day",
     "recentTasks": "Recent Tasks",
-    "noData": "No data available for this period"
+    "noData": "No data available for this period",
+    "detailedMonthlyReports": "Detailed monthly reports",
+    "advancedAnalytics": "Advanced analytics and statistics"
+  },
+  "settings": {
+    "description": "Manage your preferences and settings",
+    "status": "Status",
+    "paymentHistory": "Payment History",
+    "noPaymentsFound": "No payments found",
+    "account": "Account",
+    "active": "Active",
+    "expires": "Expires"
   }
 }
 

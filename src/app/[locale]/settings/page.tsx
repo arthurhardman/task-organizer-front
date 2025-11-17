@@ -109,7 +109,7 @@ export default function SettingsPage() {
       <div className="max-w-2xl mx-auto space-y-8 animate-in">
         <div>
           <h1 className="text-4xl font-bold gradient-text mb-2">{t('navigation.settings')}</h1>
-          <p className="text-muted-foreground">Gerencie suas preferências e configurações</p>
+          <p className="text-muted-foreground">{t('settings.description')}</p>
         </div>
 
         <Card className="card-hover border-border/50 bg-gradient-to-br from-card to-card/50">
@@ -122,7 +122,7 @@ export default function SettingsPage() {
           <CardContent>
             <div className="space-y-4">
               <div className="p-4 rounded-lg bg-muted/30">
-                <p className="text-sm text-muted-foreground mb-2">Status</p>
+                <p className="text-sm text-muted-foreground mb-2">{t('settings.status')}</p>
                 <p className="font-semibold text-lg">
                   {subscriptionStatus?.isPremium ? (
                     <span className="flex items-center gap-2">
@@ -181,7 +181,7 @@ export default function SettingsPage() {
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-primary" />
-              Histórico de Pagamentos
+              {t('settings.paymentHistory')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -191,7 +191,7 @@ export default function SettingsPage() {
               </div>
             ) : paymentHistory.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-muted-foreground">Nenhum pagamento encontrado</p>
+                <p className="text-muted-foreground">{t('settings.noPaymentsFound')}</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -221,9 +221,9 @@ export default function SettingsPage() {
                         }`}
                       >
                         {payment.status === 'active' && !payment.isExpired
-                          ? 'Ativo'
+                          ? t('settings.active')
                           : payment.isExpired
-                          ? 'Expirado'
+                          ? t('payment.expired')
                           : payment.status}
                       </span>
                     </div>
@@ -236,7 +236,7 @@ export default function SettingsPage() {
                       </div>
                       {payment.expiresAt && (
                         <span>
-                          Expira: {format(new Date(payment.expiresAt), 'dd/MM/yyyy')}
+                          {t('settings.expires')}: {format(new Date(payment.expiresAt), 'dd/MM/yyyy')}
                         </span>
                       )}
                     </div>
@@ -254,16 +254,16 @@ export default function SettingsPage() {
 
         <Card className="card-hover border-border/50 bg-gradient-to-br from-card to-card/50">
           <CardHeader className="pb-4">
-            <CardTitle>Conta</CardTitle>
+            <CardTitle>{t('settings.account')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="p-4 rounded-lg bg-muted/30">
-                <p className="text-sm text-muted-foreground mb-1">Nome</p>
+                <p className="text-sm text-muted-foreground mb-1">{t('common.name')}</p>
                 <p className="font-semibold text-lg">{user.name}</p>
               </div>
               <div className="p-4 rounded-lg bg-muted/30">
-                <p className="text-sm text-muted-foreground mb-1">Email</p>
+                <p className="text-sm text-muted-foreground mb-1">{t('common.email')}</p>
                 <p className="font-semibold text-lg">{user.email}</p>
               </div>
             </div>

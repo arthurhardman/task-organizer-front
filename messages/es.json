@@ -71,7 +71,8 @@
     "done": "Hecho",
     "description": "Organiza tus tareas en columnas",
     "allPremiumFeatures": "Todas las funciones premium",
-    "noCreditLimit": "Sin límite de créditos"
+    "noCreditLimit": "Sin límite de créditos",
+    "unlimitedKanbanAccess": "Acceso ilimitado al Kanban"
   },
   "lists": {
     "title": "Listas",
@@ -147,7 +148,18 @@
     "tasksByDay": "Tareas Creadas por Día",
     "completedByDay": "Tareas Completadas por Día",
     "recentTasks": "Tareas Recientes",
-    "noData": "No hay datos disponibles para este período"
+    "noData": "No hay datos disponibles para este período",
+    "detailedMonthlyReports": "Informes mensuales detallados",
+    "advancedAnalytics": "Análisis y estadísticas avanzadas"
+  },
+  "settings": {
+    "description": "Gestiona tus preferencias y configuraciones",
+    "status": "Estado",
+    "paymentHistory": "Historial de Pagos",
+    "noPaymentsFound": "No se encontraron pagos",
+    "account": "Cuenta",
+    "active": "Activo",
+    "expires": "Expira"
   }
 }
 

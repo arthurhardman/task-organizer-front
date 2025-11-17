@@ -69,7 +69,28 @@
     "dashboard": "Dashboard",
     "kanban": "Kanban",
     "lists": "Lists",
-    "settings": "Settings"
+    "settings": "Settings",
+    "reports": "Reports"
+  },
+  "reports": {
+    "title": "Monthly Report",
+    "description": "Detailed analysis of your monthly tasks",
+    "premiumRequired": "Reports are exclusive to Premium",
+    "upgradeMessage": "Upgrade to Premium to access detailed monthly reports",
+    "selectMonth": "Select Month",
+    "summary": "Summary",
+    "totalTasks": "Total Tasks",
+    "completedTasks": "Completed Tasks",
+    "pendingTasks": "Pending Tasks",
+    "completionRate": "Completion Rate",
+    "overdueTasks": "Overdue Tasks",
+    "avgTasksPerDay": "Average Tasks per Day",
+    "byStatus": "By Status",
+    "byPriority": "By Priority",
+    "tasksByDay": "Tasks Created by Day",
+    "completedByDay": "Tasks Completed by Day",
+    "recentTasks": "Recent Tasks",
+    "noData": "No data available for this period"
   }
 }
 

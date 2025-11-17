@@ -69,7 +69,28 @@
     "dashboard": "Panel",
     "kanban": "Kanban",
     "lists": "Listas",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "reports": "Informes"
+  },
+  "reports": {
+    "title": "Informe Mensual",
+    "description": "Análisis detallado de tus tareas del mes",
+    "premiumRequired": "Los informes son exclusivos para Premium",
+    "upgradeMessage": "Actualiza a Premium para acceder a informes mensuales detallados",
+    "selectMonth": "Seleccionar Mes",
+    "summary": "Resumen",
+    "totalTasks": "Total de Tareas",
+    "completedTasks": "Tareas Completadas",
+    "pendingTasks": "Tareas Pendientes",
+    "completionRate": "Tasa de Finalización",
+    "overdueTasks": "Tareas Atrasadas",
+    "avgTasksPerDay": "Promedio de Tareas por Día",
+    "byStatus": "Por Estado",
+    "byPriority": "Por Prioridad",
+    "tasksByDay": "Tareas Creadas por Día",
+    "completedByDay": "Tareas Completadas por Día",
+    "recentTasks": "Tareas Recientes",
+    "noData": "No hay datos disponibles para este período"
   }
 }
 

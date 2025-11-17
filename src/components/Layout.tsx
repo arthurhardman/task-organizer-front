@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter, usePathname, Link } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, Columns, List, Settings, LogOut, Globe, Coins } from 'lucide-react';
+import { LayoutDashboard, Columns, List, Settings, LogOut, Globe, Coins, BarChart3 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import api from '@/lib/api';
 
@@ -71,6 +71,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { href: '/dashboard', icon: LayoutDashboard, label: t('navigation.dashboard') },
     { href: '/kanban', icon: Columns, label: t('navigation.kanban') },
     { href: '/lists', icon: List, label: t('navigation.lists') },
+    ...(user?.isPremium ? [{ href: '/reports', icon: BarChart3, label: t('navigation.reports') }] : []),
     { href: '/settings', icon: Settings, label: t('navigation.settings') },
   ];
 

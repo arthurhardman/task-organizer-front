@@ -12,6 +12,7 @@ import { Plus, Trash2, Edit, Lock, Sparkles } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { toast } from '@/components/ui/toast';
 import { PlansModal } from '@/components/PlansModal';
+import { ConfirmModal } from '@/components/ConfirmModal';
 
 interface Task {
   id: number;
@@ -39,6 +40,9 @@ export default function KanbanPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [showPlansModal, setShowPlansModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState<number | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -87,14 +91,22 @@ export default function KanbanPage() {
     }
   };
 
-  const handleDelete = async (taskId: number) => {
-    if (!confirm(t('tasks.confirmDelete'))) return;
+  const handleDeleteClick = (taskId: number) => {
+    setTaskToDelete(taskId);
+    setShowConfirmModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!taskToDelete) return;
+    
+    setDeleting(true);
     try {
-      const response = await api.delete(`/tasks/${taskId}`);
+      const response = await api.delete(`/tasks/${taskToDelete}`);
       if (response.data.creditsRemaining !== undefined) {
         updateUser({ credits: response.data.creditsRemaining });
       }
       fetchTasks();
+      toast.success(t('tasks.taskDeleted') || 'Tarefa excluída com sucesso!');
     } catch (error: any) {
       if (error.response?.status === 403) {
         toast.error(error.response?.data?.message || t('tasks.insufficientCredits'));
@@ -112,6 +124,9 @@ export default function KanbanPage() {
         console.error('Error deleting task:', error);
         toast.error(t('tasks.errorDeleting'));
       }
+    } finally {
+      setDeleting(false);
+      setTaskToDelete(null);
     }
   };
 
@@ -452,7 +467,7 @@ export default function KanbanPage() {
                               <Edit className="w-4 h-4 text-muted-foreground" />
                             </button>
                             <button
-                              onClick={() => handleDelete(task.id)}
+                              onClick={() => handleDeleteClick(task.id)}
                               className="p-1.5 hover:bg-destructive/10 rounded-lg transition-colors"
                             >
                               <Trash2 className="w-4 h-4 text-destructive" />
@@ -499,6 +514,20 @@ export default function KanbanPage() {
         isOpen={showPlansModal} 
         onClose={() => setShowPlansModal(false)}
         currentCredits={user?.credits}
+      />
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        onClose={() => {
+          setShowConfirmModal(false);
+          setTaskToDelete(null);
+        }}
+        onConfirm={handleDeleteConfirm}
+        title={t('tasks.confirmDeleteTitle') || 'Confirmar Exclusão'}
+        description={t('tasks.confirmDelete')}
+        confirmText={t('common.delete')}
+        cancelText={t('common.cancel')}
+        variant="destructive"
+        loading={deleting}
       />
     </Layout>
   );

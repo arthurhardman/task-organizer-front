@@ -52,7 +52,9 @@
     "errorUpdating": "Error al actualizar tarea",
     "errorDeleting": "Error al eliminar tarea",
     "errorSaving": "Error al guardar tarea",
-    "confirmDelete": "¿Estás seguro de que deseas eliminar esta tarea?"
+    "confirmDelete": "¿Estás seguro de que deseas eliminar esta tarea?",
+    "confirmDeleteTitle": "Confirmar Eliminación",
+    "taskDeleted": "¡Tarea eliminada con éxito!"
   },
   "dashboard": {
     "title": "Panel",

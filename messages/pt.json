@@ -52,7 +52,9 @@
     "errorUpdating": "Erro ao atualizar tarefa",
     "errorDeleting": "Erro ao deletar tarefa",
     "errorSaving": "Erro ao salvar tarefa",
-    "confirmDelete": "Tem certeza que deseja excluir esta tarefa?"
+    "confirmDelete": "Tem certeza que deseja excluir esta tarefa?",
+    "confirmDeleteTitle": "Confirmar Exclusão",
+    "taskDeleted": "Tarefa excluída com sucesso!"
   },
   "dashboard": {
     "title": "Dashboard",

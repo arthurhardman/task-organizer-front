@@ -7,6 +7,7 @@ interface User {
   name: string;
   isPremium: boolean;
   language: string;
+  credits?: number;
 }
 
 interface AuthState {

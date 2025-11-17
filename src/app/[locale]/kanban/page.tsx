@@ -29,7 +29,7 @@ const columns = [
 export default function KanbanPage() {
   const t = useTranslations();
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { user, updateUser } = useAuthStore();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -56,20 +56,52 @@ export default function KanbanPage() {
 
   const handleStatusChange = async (taskId: number, newStatus: string) => {
     try {
-      await api.put(`/tasks/${taskId}`, { status: newStatus });
+      const response = await api.put(`/tasks/${taskId}`, { status: newStatus });
+      if (response.data.creditsRemaining !== undefined) {
+        updateUser({ credits: response.data.creditsRemaining });
+      }
       fetchTasks();
-    } catch (error) {
-      console.error('Error updating task:', error);
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        alert(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        // Atualizar créditos do usuário
+        try {
+          const userResponse = await api.get('/auth/me');
+          if (userResponse.data.credits !== undefined) {
+            updateUser({ credits: userResponse.data.credits });
+          }
+        } catch (e) {
+          console.error('Error fetching credits:', e);
+        }
+      } else {
+        console.error('Error updating task:', error);
+      }
     }
   };
 
   const handleDelete = async (taskId: number) => {
     if (!confirm('Tem certeza que deseja excluir esta tarefa?')) return;
     try {
-      await api.delete(`/tasks/${taskId}`);
+      const response = await api.delete(`/tasks/${taskId}`);
+      if (response.data.creditsRemaining !== undefined) {
+        updateUser({ credits: response.data.creditsRemaining });
+      }
       fetchTasks();
-    } catch (error) {
-      console.error('Error deleting task:', error);
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        alert(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        // Atualizar créditos do usuário
+        try {
+          const userResponse = await api.get('/auth/me');
+          if (userResponse.data.credits !== undefined) {
+            updateUser({ credits: userResponse.data.credits });
+          }
+        } catch (e) {
+          console.error('Error fetching credits:', e);
+        }
+      } else {
+        console.error('Error deleting task:', error);
+      }
     }
   };
 
@@ -85,16 +117,37 @@ export default function KanbanPage() {
     };
 
     try {
+      let response;
       if (editingTask) {
-        await api.put(`/tasks/${editingTask.id}`, taskData);
+        response = await api.put(`/tasks/${editingTask.id}`, taskData);
       } else {
-        await api.post('/tasks', taskData);
+        response = await api.post('/tasks', taskData);
       }
+      
+      // Atualizar créditos se retornados
+      if (response.data.creditsRemaining !== undefined) {
+        updateUser({ credits: response.data.creditsRemaining });
+      }
+      
       setShowCreateModal(false);
       setEditingTask(null);
       fetchTasks();
-    } catch (error) {
-      console.error('Error saving task:', error);
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        alert(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        // Atualizar créditos do usuário
+        try {
+          const userResponse = await api.get('/auth/me');
+          if (userResponse.data.credits !== undefined) {
+            updateUser({ credits: userResponse.data.credits });
+          }
+        } catch (e) {
+          console.error('Error fetching credits:', e);
+        }
+      } else {
+        console.error('Error saving task:', error);
+        alert('Erro ao salvar tarefa');
+      }
     }
   };
 

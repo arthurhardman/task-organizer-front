@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter, usePathname, Link } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, Columns, List, Settings, LogOut, Globe } from 'lucide-react';
+import { LayoutDashboard, Columns, List, Settings, LogOut, Globe, Coins } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import api from '@/lib/api';
 
@@ -22,7 +22,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       return;
     }
     
-    // Verificar status premium ao carregar (para atualizar se expirou)
+    // Verificar status premium e créditos ao carregar
     const checkPremiumStatus = async () => {
       try {
         const response = await api.get('/payments/status');
@@ -34,7 +34,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       }
     };
     
+    // Buscar créditos atualizados
+    const fetchCredits = async () => {
+      try {
+        const response = await api.get('/auth/me');
+        if (response.data.credits !== undefined) {
+          updateUser({ credits: response.data.credits });
+        }
+      } catch (error) {
+        console.error('Error fetching credits:', error);
+      }
+    };
+    
     checkPremiumStatus();
+    fetchCredits();
   }, [user, router]);
 
   const handleLogout = () => {
@@ -134,6 +147,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
                 <span className="text-sm font-medium">{user?.name}</span>
               </div>
+              {!user?.isPremium && user?.credits !== undefined && (
+                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 border border-primary/20 rounded-full">
+                  <Coins className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-xs font-semibold text-primary">
+                    {user.credits === -1 ? '∞' : user.credits} créditos
+                  </span>
+                </div>
+              )}
               {user?.isPremium && (
                 <span className="px-2.5 py-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 text-yellow-900 text-xs font-bold rounded-full shadow-lg shadow-yellow-500/20">
                   ⭐ Premium

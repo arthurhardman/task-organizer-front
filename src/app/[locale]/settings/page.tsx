@@ -107,27 +107,6 @@ export default function SettingsPage() {
         <Card className="card-hover border-border/50 bg-gradient-to-br from-card to-card/50">
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2">
-              <Globe className="w-5 h-5 text-primary" />
-              Idioma / Language / Idioma
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Select
-              value={language}
-              onChange={(e) => handleLanguageChange(e.target.value)}
-              disabled={loading}
-              className="h-11 border-border/50 focus:border-primary transition-colors"
-            >
-              <option value="pt">🇧🇷 Português</option>
-              <option value="en">🇺🇸 English</option>
-              <option value="es">🇪🇸 Español</option>
-            </Select>
-          </CardContent>
-        </Card>
-
-        <Card className="card-hover border-border/50 bg-gradient-to-br from-card to-card/50">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2">
               <span className="text-2xl">⭐</span>
               Assinatura Premium
             </CardTitle>

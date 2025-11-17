@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
@@ -44,6 +44,7 @@ export default function SettingsPage() {
   const [subscriptionStatus, setSubscriptionStatus] = useState<SubscriptionStatus | null>(null);
   const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryItem[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
+  const hasFetchedRef = useRef(false); // Flag para garantir que só busca uma vez
 
   const handleLanguageChange = async (newLanguage: string) => {
     setLanguage(newLanguage);
@@ -61,11 +62,18 @@ export default function SettingsPage() {
   useEffect(() => {
     if (!user) {
       router.push('/login');
+      hasFetchedRef.current = false; // Resetar flag quando não há usuário
       return;
     }
-    fetchSubscriptionStatus();
-    fetchPaymentHistory();
-  }, [user, router]);
+    
+    // Garantir que só busca os dados uma vez por sessão de usuário
+    if (!hasFetchedRef.current) {
+      hasFetchedRef.current = true;
+      fetchSubscriptionStatus();
+      fetchPaymentHistory();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]); // Executa apenas quando o ID do usuário muda (login/logout)
 
   const fetchSubscriptionStatus = async () => {
     try {

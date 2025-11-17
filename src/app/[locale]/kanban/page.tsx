@@ -10,6 +10,8 @@ import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Plus, Trash2, Edit, Lock, Sparkles } from 'lucide-react';
 import { Link } from '@/i18n/routing';
+import { toast } from '@/components/ui/toast';
+import { PlansModal } from '@/components/PlansModal';
 
 interface Task {
   id: number;
@@ -18,6 +20,7 @@ interface Task {
   status: 'todo' | 'inProgress' | 'done';
   priority: string;
   due_date: string | null;
+  due_time: string | null;
   position: number;
 }
 
@@ -35,6 +38,7 @@ export default function KanbanPage() {
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [showPlansModal, setShowPlansModal] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -64,7 +68,8 @@ export default function KanbanPage() {
       fetchTasks();
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        toast.error(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        setShowPlansModal(true);
         // Atualizar créditos do usuário
         try {
           const userResponse = await api.get('/auth/me');
@@ -76,6 +81,7 @@ export default function KanbanPage() {
         }
       } else {
         console.error('Error updating task:', error);
+        toast.error('Erro ao atualizar tarefa');
       }
     }
   };
@@ -90,7 +96,8 @@ export default function KanbanPage() {
       fetchTasks();
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        toast.error(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        setShowPlansModal(true);
         // Atualizar créditos do usuário
         try {
           const userResponse = await api.get('/auth/me');
@@ -102,19 +109,21 @@ export default function KanbanPage() {
         }
       } else {
         console.error('Error deleting task:', error);
+        toast.error('Erro ao deletar tarefa');
       }
     }
   };
 
   const handleCreateOrUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+      const formData = new FormData(e.currentTarget);
     const taskData = {
       title: formData.get('title'),
       description: formData.get('description'),
       status: formData.get('status') || 'todo',
       priority: formData.get('priority') || 'medium',
       due_date: formData.get('due_date') || null,
+      due_time: formData.get('due_time') || null,
     };
 
     try {
@@ -133,9 +142,11 @@ export default function KanbanPage() {
       setShowCreateModal(false);
       setEditingTask(null);
       fetchTasks();
+      toast.success(editingTask ? 'Tarefa atualizada com sucesso!' : 'Tarefa criada com sucesso!');
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        toast.error(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        setShowPlansModal(true);
         // Atualizar créditos do usuário
         try {
           const userResponse = await api.get('/auth/me');
@@ -147,7 +158,7 @@ export default function KanbanPage() {
         }
       } else {
         console.error('Error saving task:', error);
-        alert('Erro ao salvar tarefa');
+        toast.error('Erro ao salvar tarefa');
       }
     }
   };
@@ -333,6 +344,15 @@ export default function KanbanPage() {
                         className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                       />
                     </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-foreground">Horário</label>
+                      <input
+                        name="due_time"
+                        type="time"
+                        defaultValue={editingTask?.due_time || ''}
+                        className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                      />
+                    </div>
                   </div>
                   {editingTask && (
                     <div className="space-y-2">
@@ -456,6 +476,7 @@ export default function KanbanPage() {
                           {task.due_date && (
                             <span className="text-xs text-muted-foreground font-medium">
                               {new Date(task.due_date).toLocaleDateString()}
+                              {task.due_time && ` às ${task.due_time}`}
                             </span>
                           )}
                         </div>
@@ -473,6 +494,11 @@ export default function KanbanPage() {
           })}
         </div>
       </div>
+      <PlansModal 
+        isOpen={showPlansModal} 
+        onClose={() => setShowPlansModal(false)}
+        currentCredits={user?.credits}
+      />
     </Layout>
   );
 }

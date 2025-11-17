@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
+import { toast } from '@/components/ui/toast';
 
 export default function LoginPage() {
   const t = useTranslations();
@@ -39,7 +40,7 @@ export default function LoginPage() {
       setAuth(response.data.user, response.data.token);
       router.push('/dashboard');
     } catch (error: any) {
-      alert(error.response?.data?.error || 'Erro ao fazer login');
+      toast.error(error.response?.data?.error || 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }

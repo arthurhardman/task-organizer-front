@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
 import { Metadata } from 'next';
+import { ToastContainer } from '@/components/ui/toast';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -67,6 +68,7 @@ export default async function LocaleLayout({
       <body className={inter.className}>
         <NextIntlClientProvider messages={messages}>
           {children}
+          <ToastContainer />
         </NextIntlClientProvider>
       </body>
     </html>

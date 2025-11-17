@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter, usePathname, Link } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, Columns, List, Settings, LogOut, Globe, Coins, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, Columns, List, Settings, LogOut, Globe, Coins, BarChart3, Menu, X } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import api from '@/lib/api';
 
@@ -15,6 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user, logout, updateUser } = useAuthStore();
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -75,14 +76,28 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { href: '/settings', icon: Settings, label: t('navigation.settings') },
   ];
 
+  // No mobile, mostrar apenas dashboard
+  const mobileNavItems = [
+    { href: '/dashboard', icon: LayoutDashboard, label: t('navigation.dashboard') },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <nav className="border-b border-border/50 bg-card/80 sticky top-0 z-40 backdrop-blur-xl supports-[backdrop-filter]:bg-card/60 shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 md:gap-8">
+            {/* Menu Mobile Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="md:hidden h-10 w-10 rounded-full hover:bg-muted/50 transition-all"
+            >
+              {showMobileMenu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
             <Link 
               href="/dashboard" 
-              className="text-2xl font-bold gradient-text hover:opacity-90 transition-all duration-300"
+              className="text-xl md:text-2xl font-bold gradient-text hover:opacity-90 transition-all duration-300"
             >
               {t('common.appName')}
             </Link>
@@ -107,7 +122,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               })}
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <ThemeToggle />
             <div className="relative">
               <Button
@@ -141,7 +156,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
               )}
             </div>
-            <div className="hidden sm:flex items-center gap-3 px-3 py-1.5 rounded-full bg-muted/30">
+            <div className="hidden md:flex items-center gap-3 px-3 py-1.5 rounded-full bg-muted/30">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white text-xs font-bold">
                   {user?.name?.charAt(0).toUpperCase()}
@@ -173,6 +188,53 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </Button>
           </div>
         </div>
+        
+        {/* Mobile Menu */}
+        {showMobileMenu && (
+          <div className="md:hidden border-t border-border/50 bg-card/95 backdrop-blur-xl">
+            <div className="container mx-auto px-4 py-4 space-y-2">
+              {mobileNavItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname?.includes(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setShowMobileMenu(false)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-sm font-medium ${
+                      isActive
+                        ? 'bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/20'
+                        : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    {item.label}
+                  </Link>
+                );
+              })}
+              
+              {/* User info mobile */}
+              <div className="pt-4 border-t border-border/50 mt-4">
+                <div className="flex items-center gap-3 px-4 py-2">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white text-sm font-bold">
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">{user?.name}</p>
+                    {!user?.isPremium && user?.credits !== undefined && (
+                      <p className="text-xs text-muted-foreground">
+                        {user.credits === -1 ? '∞' : user.credits} créditos
+                      </p>
+                    )}
+                    {user?.isPremium && (
+                      <p className="text-xs text-yellow-600 font-semibold">⭐ Premium</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
       <main className="container mx-auto px-4 py-8 sm:py-10">{children}</main>
     </div>

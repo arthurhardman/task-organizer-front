@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Plus, Trash2, Edit, CheckCircle2 } from 'lucide-react';
+import { toast } from '@/components/ui/toast';
+import { PlansModal } from '@/components/PlansModal';
 
 interface Task {
   id: number;
@@ -17,6 +19,7 @@ interface Task {
   status: string;
   priority: string;
   due_date: string | null;
+  due_time: string | null;
 }
 
 export default function ListsPage() {
@@ -27,6 +30,7 @@ export default function ListsPage() {
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [showPlansModal, setShowPlansModal] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -57,7 +61,8 @@ export default function ListsPage() {
       fetchTasks();
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        toast.error(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        setShowPlansModal(true);
         try {
           const userResponse = await api.get('/auth/me');
           if (userResponse.data.credits !== undefined) {
@@ -68,6 +73,7 @@ export default function ListsPage() {
         }
       } else {
         console.error('Error updating task:', error);
+        toast.error('Erro ao atualizar tarefa');
       }
     }
   };
@@ -82,7 +88,8 @@ export default function ListsPage() {
       fetchTasks();
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        toast.error(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        setShowPlansModal(true);
         try {
           const userResponse = await api.get('/auth/me');
           if (userResponse.data.credits !== undefined) {
@@ -93,6 +100,7 @@ export default function ListsPage() {
         }
       } else {
         console.error('Error deleting task:', error);
+        toast.error('Erro ao deletar tarefa');
       }
     }
   };
@@ -106,6 +114,7 @@ export default function ListsPage() {
       status: formData.get('status') || 'todo',
       priority: formData.get('priority') || 'medium',
       due_date: formData.get('due_date') || null,
+      due_time: formData.get('due_time') || null,
     };
 
     try {
@@ -123,9 +132,11 @@ export default function ListsPage() {
       setShowCreateModal(false);
       setEditingTask(null);
       fetchTasks();
+      toast.success(editingTask ? 'Tarefa atualizada com sucesso!' : 'Tarefa criada com sucesso!');
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        toast.error(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        setShowPlansModal(true);
         try {
           const userResponse = await api.get('/auth/me');
           if (userResponse.data.credits !== undefined) {
@@ -136,7 +147,7 @@ export default function ListsPage() {
         }
       } else {
         console.error('Error saving task:', error);
-        alert('Erro ao salvar tarefa');
+        toast.error('Erro ao salvar tarefa');
       }
     }
   };
@@ -223,6 +234,15 @@ export default function ListsPage() {
                         name="due_date"
                         type="date"
                         defaultValue={editingTask?.due_date ? editingTask.due_date.split('T')[0] : ''}
+                        className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-foreground">Horário</label>
+                      <input
+                        name="due_time"
+                        type="time"
+                        defaultValue={editingTask?.due_time || ''}
                         className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                       />
                     </div>
@@ -323,6 +343,7 @@ export default function ListsPage() {
                           {task.due_date && (
                             <span className="text-xs text-muted-foreground">
                               {new Date(task.due_date).toLocaleDateString()}
+                              {task.due_time && ` às ${task.due_time}`}
                             </span>
                           )}
                           <span className="text-xs text-muted-foreground">
@@ -359,6 +380,11 @@ export default function ListsPage() {
           </CardContent>
         </Card>
       </div>
+      <PlansModal 
+        isOpen={showPlansModal} 
+        onClose={() => setShowPlansModal(false)}
+        currentCredits={user?.credits}
+      />
     </Layout>
   );
 }

@@ -116,7 +116,11 @@
     "renewSubscription": "Renovar Suscripción",
     "upgradeToPremium": "Actualizar a Premium",
     "paymentSuccess": "¡Pago Realizado con Éxito!",
-    "goToDashboard": "Ir al Panel"
+    "goToDashboard": "Ir al Panel",
+    "emailAlertTitle": "⚠️ Importante: Usa tu correo registrado",
+    "emailAlertDescription": "Para que podamos actualizar tu plan automáticamente, es esencial que uses el mismo correo registrado en el sistema durante el checkout.",
+    "useThisEmail": "Usa este correo en el checkout:",
+    "emailAlertWarning": "Si usas un correo diferente, no podremos identificar tu cuenta y actualizar tu plan automáticamente."
   },
   "navigation": {
     "dashboard": "Panel",

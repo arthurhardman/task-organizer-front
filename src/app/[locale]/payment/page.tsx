@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
-import { CheckCircle2, Loader2, ExternalLink, Coins, Sparkles, CheckCircle } from 'lucide-react';
+import { CheckCircle2, Loader2, ExternalLink, Coins, Sparkles, CheckCircle, AlertCircle, Mail } from 'lucide-react';
 import { PlansModal } from '@/components/PlansModal';
 
 const BASIC_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/RNCPqNAHkEGRn21iIW2s'; // Plano Básico
@@ -78,6 +78,40 @@ export default function PaymentPage() {
           <h1 className="text-4xl font-bold gradient-text mb-2">{t('payment.title')}</h1>
           <p className="text-muted-foreground">{t('payment.unlockPremium')}</p>
         </div>
+
+        {/* Alerta importante sobre o e-mail */}
+        <Card className="border-2 border-yellow-500/50 bg-gradient-to-br from-yellow-50/50 to-orange-50/50 dark:from-yellow-950/20 dark:to-orange-950/20 shadow-lg">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg">
+                  <AlertCircle className="w-6 h-6 text-yellow-900" />
+                </div>
+              </div>
+              <div className="flex-1 space-y-3">
+                <div>
+                  <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+                    <Mail className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+                    {t('payment.emailAlertTitle')}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    {t('payment.emailAlertDescription')}
+                  </p>
+                </div>
+                <div className="p-4 rounded-lg bg-background/50 border border-yellow-500/30">
+                  <p className="text-xs text-muted-foreground mb-1">{t('payment.useThisEmail')}</p>
+                  <p className="text-lg font-bold text-foreground break-all flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-primary flex-shrink-0" />
+                    {user.email}
+                  </p>
+                </div>
+                <p className="text-xs text-muted-foreground italic">
+                  {t('payment.emailAlertWarning')}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
         
         <div className="grid md:grid-cols-2 gap-6">
           {/* Plano Básico */}

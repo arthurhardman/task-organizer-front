@@ -116,7 +116,11 @@
     "renewSubscription": "Renew Subscription",
     "upgradeToPremium": "Upgrade to Premium",
     "paymentSuccess": "Payment Successful!",
-    "goToDashboard": "Go to Dashboard"
+    "goToDashboard": "Go to Dashboard",
+    "emailAlertTitle": "⚠️ Important: Use your registered email",
+    "emailAlertDescription": "For us to automatically update your plan, it is essential that you use the same email registered in the system during checkout.",
+    "useThisEmail": "Use this email in checkout:",
+    "emailAlertWarning": "If you use a different email, we won't be able to identify your account and update your plan automatically."
   },
   "navigation": {
     "dashboard": "Dashboard",

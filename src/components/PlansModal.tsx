@@ -3,8 +3,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/routing';
-import { CheckCircle2, Coins, Sparkles, ExternalLink } from 'lucide-react';
+import { CheckCircle2, Coins, Sparkles, ExternalLink, AlertCircle, Mail } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useAuthStore } from '@/store/authStore';
 
 interface PlansModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ const PREMIUM_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/udNaQ9Xhb03
 
 export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps) {
   const t = useTranslations();
+  const { user } = useAuthStore();
   
   if (!isOpen) return null;
 
@@ -53,6 +55,42 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
               ×
             </Button>
           </div>
+
+          {/* Alerta importante sobre o e-mail */}
+          {user?.email && (
+            <Card className="mb-6 border-2 border-yellow-500/50 bg-gradient-to-br from-yellow-50/50 to-orange-50/50 dark:from-yellow-950/20 dark:to-orange-950/20 shadow-lg">
+              <CardContent className="p-4">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg">
+                      <AlertCircle className="w-5 h-5 text-yellow-900" />
+                    </div>
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <div>
+                      <h3 className="font-bold text-sm mb-1 flex items-center gap-2">
+                        <Mail className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
+                        {t('payment.emailAlertTitle')}
+                      </h3>
+                      <p className="text-xs text-muted-foreground mb-2">
+                        {t('payment.emailAlertDescription')}
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-background/50 border border-yellow-500/30">
+                      <p className="text-xs text-muted-foreground mb-1">{t('payment.useThisEmail')}</p>
+                      <p className="text-sm font-bold text-foreground break-all flex items-center gap-2">
+                        <Mail className="w-3 h-3 text-primary flex-shrink-0" />
+                        {user.email}
+                      </p>
+                    </div>
+                    <p className="text-xs text-muted-foreground italic">
+                      {t('payment.emailAlertWarning')}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Plano Básico */}

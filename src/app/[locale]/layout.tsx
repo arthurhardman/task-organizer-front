@@ -10,6 +10,7 @@ import { Metadata } from 'next';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  title: 'Task Organizer',
   icons: {
     icon: '/icon.png',
     shortcut: '/icon.png',

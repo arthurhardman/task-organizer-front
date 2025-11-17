@@ -58,10 +58,12 @@
   },
   "payment": {
     "title": "Premium Subscription",
-    "description": "Unlock all features for just R$ 25.00/month",
+    "description": "Unlock all features for just R$ 29.90/month",
     "payNow": "Pay Now",
     "premiumRequired": "Premium Feature",
-    "upgradeMessage": "Upgrade to access this feature"
+    "upgradeMessage": "Upgrade to access this feature",
+    "kanbanBlocked": "Kanban is a Premium feature",
+    "kanbanBlockedMessage": "To use Kanban, you need to have an active Premium subscription. Upgrade now and unlock all features!"
   },
   "navigation": {
     "dashboard": "Dashboard",

@@ -91,7 +91,7 @@ export default function PaymentPage() {
           <CardContent className="space-y-6">
             <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20 p-6 rounded-lg">
               <div className="text-center mb-4">
-                <div className="text-4xl font-bold gradient-text mb-2">R$ 25,00</div>
+                <div className="text-4xl font-bold gradient-text mb-2">R$ 29,90</div>
                 <p className="text-muted-foreground">por mês</p>
               </div>
               <div className="space-y-2 text-sm text-foreground">

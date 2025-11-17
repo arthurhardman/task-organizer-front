@@ -8,7 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
-import { Plus, Trash2, Edit } from 'lucide-react';
+import { Plus, Trash2, Edit, Lock, Sparkles } from 'lucide-react';
+import { Link } from '@/i18n/routing';
 
 interface Task {
   id: number;
@@ -157,6 +158,98 @@ export default function KanbanPage() {
 
   if (!user) {
     return null;
+  }
+
+  // Bloquear acesso se não for premium
+  if (!user.isPremium) {
+    return (
+      <Layout>
+        <div className="relative">
+          {/* Conteúdo borrado */}
+          <div className="blur-sm pointer-events-none select-none opacity-30">
+            <div className="space-y-8 animate-in">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h1 className="text-4xl font-bold gradient-text mb-2">{t('kanban.title')}</h1>
+                  <p className="text-muted-foreground">Organize suas tarefas em colunas</p>
+                </div>
+                <Button 
+                  onClick={() => {}}
+                  className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-105"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  {t('tasks.createTask')}
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {columns.map((column) => (
+                  <Card key={column.id} className="border-border/50 bg-gradient-to-br from-card to-card/50 min-h-[500px]">
+                    <CardHeader className="pb-4">
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        {t(column.label)}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-center py-8 text-muted-foreground">
+                        {t('tasks.noTasks')}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Modal de bloqueio */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in">
+            <Card className="bg-card/95 backdrop-blur-xl border-border/50 shadow-2xl max-w-md w-full m-4 animate-slide-up">
+              <CardContent className="p-8">
+                <div className="text-center space-y-6">
+                  <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg shadow-yellow-500/20">
+                    <Lock className="w-10 h-10 text-yellow-900" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h2 className="text-2xl font-bold gradient-text">
+                      {t('payment.kanbanBlocked')}
+                    </h2>
+                    <p className="text-muted-foreground">
+                      {t('payment.kanbanBlockedMessage')}
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20 p-6 rounded-lg space-y-3">
+                    <div className="flex items-center justify-center gap-2">
+                      <Sparkles className="w-5 h-5 text-primary" />
+                      <span className="text-2xl font-bold gradient-text">R$ 29,90</span>
+                      <span className="text-muted-foreground">/mês</span>
+                    </div>
+                    <ul className="text-sm text-muted-foreground space-y-1 text-left">
+                      <li>✨ Acesso ilimitado ao Kanban</li>
+                      <li>✨ Sem limite de créditos</li>
+                      <li>✨ Todos os recursos premium</li>
+                    </ul>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Link href="/payment" className="flex-1">
+                      <Button className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg shadow-primary/20">
+                        {t('payment.payNow')}
+                      </Button>
+                    </Link>
+                    <Link href="/dashboard" className="flex-1">
+                      <Button variant="outline" className="w-full">
+                        {t('common.cancel')}
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </Layout>
+    );
   }
 
   return (

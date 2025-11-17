@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
-import { format, startOfWeek, endOfWeek, isToday, isPast, parseISO } from 'date-fns';
+import { format, startOfWeek, endOfWeek, isToday, isPast, parseISO, startOfDay, isBefore, isSameDay } from 'date-fns';
 import { Calendar, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
 import { Link, useRouter } from '@/i18n/routing';
 
@@ -64,10 +64,14 @@ export default function DashboardPage() {
     return isToday(parseISO(task.due_date));
   });
 
-  // Tarefas atrasadas (apenas com data)
+  // Tarefas atrasadas (hoje ou datas passadas)
   const overdueTasks = tasks.filter((task) => {
     if (!task.due_date) return false;
-    return isPast(parseISO(task.due_date)) && task.status !== 'done';
+    const taskDate = parseISO(task.due_date);
+    const today = startOfDay(new Date());
+    const taskDateNormalized = startOfDay(taskDate);
+    // Considera atrasada se for hoje ou data passada
+    return (isSameDay(taskDateNormalized, today) || isBefore(taskDateNormalized, today)) && task.status !== 'done';
   });
 
   // Tarefas futuras (apenas com data futura, excluindo tarefas sem data)

@@ -58,10 +58,12 @@
   },
   "payment": {
     "title": "Suscripción Premium",
-    "description": "Desbloquea todas las funciones por solo R$ 25,00/mes",
+    "description": "Desbloquea todas las funciones por solo R$ 29,90/mes",
     "payNow": "Pagar Ahora",
     "premiumRequired": "Función Premium",
-    "upgradeMessage": "Actualiza para acceder a esta función"
+    "upgradeMessage": "Actualiza para acceder a esta función",
+    "kanbanBlocked": "Kanban es una función Premium",
+    "kanbanBlockedMessage": "Para usar Kanban, necesitas tener una suscripción Premium activa. ¡Actualiza ahora y desbloquea todas las funciones!"
   },
   "navigation": {
     "dashboard": "Panel",

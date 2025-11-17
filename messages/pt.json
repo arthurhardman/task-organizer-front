@@ -58,10 +58,12 @@
   },
   "payment": {
     "title": "Assinatura Premium",
-    "description": "Desbloqueie todos os recursos por apenas R$ 25,00/mês",
+    "description": "Desbloqueie todos os recursos por apenas R$ 29,90/mês",
     "payNow": "Pagar Agora",
     "premiumRequired": "Recurso Premium",
-    "upgradeMessage": "Faça upgrade para acessar este recurso"
+    "upgradeMessage": "Faça upgrade para acessar este recurso",
+    "kanbanBlocked": "Kanban é um recurso Premium",
+    "kanbanBlockedMessage": "Para usar o Kanban, você precisa ter uma assinatura Premium ativa. Faça upgrade agora e desbloqueie todos os recursos!"
   },
   "navigation": {
     "dashboard": "Dashboard",

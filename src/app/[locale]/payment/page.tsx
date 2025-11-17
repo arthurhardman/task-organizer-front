@@ -11,8 +11,8 @@ import Layout from '@/components/Layout';
 import { CheckCircle2, Loader2, ExternalLink, Coins, Sparkles, CheckCircle } from 'lucide-react';
 import { PlansModal } from '@/components/PlansModal';
 
-const BASIC_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/RNCPqNAHkEGRn21iIW2s'; // TODO: Atualizar com URL real do plano básico
-const PREMIUM_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/RNCPqNAHkEGRn21iIW2s'; // TODO: Atualizar com URL real do plano premium
+const BASIC_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/RNCPqNAHkEGRn21iIW2s'; // Plano Básico
+const PREMIUM_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/udNaQ9Xhb037aDqoYMvm'; // Plano Premium
 
 export default function PaymentPage() {
   const t = useTranslations();

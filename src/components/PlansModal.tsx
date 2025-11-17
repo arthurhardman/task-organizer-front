@@ -16,8 +16,8 @@ const PREMIUM_PLAN_PRICE = 39.90;
 const BASIC_PLAN_CREDITS = 50;
 
 // URLs dos checkouts do GGCheckout
-const BASIC_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/RNCPqNAHkEGRn21iIW2s'; // TODO: Atualizar com URL real do plano básico
-const PREMIUM_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/RNCPqNAHkEGRn21iIW2s'; // TODO: Atualizar com URL real do plano premium
+const BASIC_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/RNCPqNAHkEGRn21iIW2s'; // Plano Básico
+const PREMIUM_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/udNaQ9Xhb037aDqoYMvm'; // Plano Premium
 
 export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps) {
   if (!isOpen) return null;

@@ -35,12 +35,12 @@ export default function PaymentSuccessPage() {
         <Card>
           <CardContent className="p-6 text-center">
             <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Pagamento Realizado com Sucesso!</h2>
+            <h2 className="text-2xl font-bold mb-2">{t('payment.paymentSuccess')}</h2>
             <p className="text-muted-foreground mb-4">
-              Sua assinatura Premium foi ativada. Aproveite todos os recursos!
+              {t('payment.premiumActivated')}
             </p>
             <Button onClick={() => router.push('/dashboard')}>
-              Ir para Dashboard
+              {t('payment.goToDashboard')}
             </Button>
           </CardContent>
         </Card>

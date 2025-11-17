@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname, Link } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
@@ -16,12 +16,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout, updateUser } = useAuthStore();
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const hasFetchedRef = useRef(false);
 
   useEffect(() => {
     if (!user) {
       router.push('/login');
+      hasFetchedRef.current = false;
       return;
     }
+    
+    // Evitar múltiplas chamadas - só busca uma vez por sessão de usuário
+    if (hasFetchedRef.current) {
+      return;
+    }
+    
+    hasFetchedRef.current = true;
     
     // Verificar status premium e créditos ao carregar
     const checkPremiumStatus = async () => {
@@ -49,7 +58,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     
     checkPremiumStatus();
     fetchCredits();
-  }, [user, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]); // Só executa quando o ID do usuário muda (login/logout)
 
   const handleLogout = () => {
     logout();
@@ -76,10 +86,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { href: '/settings', icon: Settings, label: t('navigation.settings') },
   ];
 
-  // No mobile, mostrar apenas dashboard
-  const mobileNavItems = [
-    { href: '/dashboard', icon: LayoutDashboard, label: t('navigation.dashboard') },
-  ];
+  // Menu mobile com todos os itens
+  const mobileNavItems = navItems;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
@@ -167,13 +175,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 border border-primary/20 rounded-full">
                   <Coins className="w-3.5 h-3.5 text-primary" />
                   <span className="text-xs font-semibold text-primary">
-                    {user.credits === -1 ? '∞' : user.credits} créditos
+                    {user.credits === -1 ? '∞' : user.credits} {t('common.credits')}
                   </span>
                 </div>
               )}
               {user?.isPremium && (
                 <span className="px-2.5 py-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 text-yellow-900 text-xs font-bold rounded-full shadow-lg shadow-yellow-500/20">
-                  ⭐ Premium
+                  ⭐ {t('common.premium')}
                 </span>
               )}
             </div>
@@ -223,11 +231,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <p className="text-sm font-medium">{user?.name}</p>
                     {!user?.isPremium && user?.credits !== undefined && (
                       <p className="text-xs text-muted-foreground">
-                        {user.credits === -1 ? '∞' : user.credits} créditos
+                        {user.credits === -1 ? '∞' : user.credits} {t('common.credits')}
                       </p>
                     )}
                     {user?.isPremium && (
-                      <p className="text-xs text-yellow-600 font-semibold">⭐ Premium</p>
+                      <p className="text-xs text-yellow-600 font-semibold">⭐ {t('common.premium')}</p>
                     )}
                   </div>
                 </div>

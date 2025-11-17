@@ -34,7 +34,8 @@ export default function DashboardPage() {
       return;
     }
     fetchTasks();
-  }, [user, view, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, view]); // Removido router das dependências
 
   const fetchTasks = async () => {
     try {
@@ -91,7 +92,7 @@ export default function DashboardPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-4xl font-bold gradient-text mb-2">{t('dashboard.title')}</h1>
-            <p className="text-muted-foreground">Organize suas tarefas de forma eficiente</p>
+            <p className="text-muted-foreground">{t('dashboard.description')}</p>
           </div>
           <div className="flex gap-2 bg-muted/50 p-1 rounded-lg">
             <Button
@@ -125,7 +126,7 @@ export default function DashboardPage() {
               <div className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
                 {todayTasks.length}
               </div>
-              <p className="text-sm text-muted-foreground mt-1">Tarefas</p>
+              <p className="text-sm text-muted-foreground mt-1">{t('dashboard.tasks')}</p>
             </CardContent>
           </Card>
 
@@ -140,7 +141,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-4xl font-bold text-destructive">{overdueTasks.length}</div>
-              <p className="text-sm text-muted-foreground mt-1">Tarefas</p>
+              <p className="text-sm text-muted-foreground mt-1">{t('dashboard.tasks')}</p>
             </CardContent>
           </Card>
 
@@ -155,7 +156,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-4xl font-bold text-primary">{upcomingTasks.length}</div>
-              <p className="text-sm text-muted-foreground mt-1">Tarefas</p>
+              <p className="text-sm text-muted-foreground mt-1">{t('dashboard.tasks')}</p>
             </CardContent>
           </Card>
         </div>
@@ -223,7 +224,7 @@ export default function DashboardPage() {
             <CardContent>
               {overdueTasks.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-muted-foreground">✨ Nenhuma tarefa atrasada</p>
+                  <p className="text-muted-foreground">{t('dashboard.noOverdueTasks')}</p>
                 </div>
               ) : (
                 <div className="space-y-3">

@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/routing';
 import { CheckCircle2, Coins, Sparkles, ExternalLink } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface PlansModalProps {
   isOpen: boolean;
@@ -20,6 +21,8 @@ const BASIC_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/RNCPqNAHkEGRn
 const PREMIUM_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/udNaQ9Xhb037aDqoYMvm'; // Plano Premium
 
 export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps) {
+  const t = useTranslations();
+  
   if (!isOpen) return null;
 
   const handlePlanClick = (checkoutUrl: string) => {
@@ -33,11 +36,11 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-3xl font-bold gradient-text mb-2">
-                Escolha seu Plano
+                {t('payment.choosePlan')}
               </h2>
               <p className="text-muted-foreground">
                 {currentCredits !== undefined && currentCredits >= 0 && (
-                  <>Você tem <span className="font-semibold text-primary">{currentCredits}</span> créditos restantes</>
+                  <>{t('payment.creditsRemaining', { credits: currentCredits })}</>
                 )}
               </p>
             </div>
@@ -60,8 +63,8 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
                     <Coins className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <CardTitle className="text-xl">Plano Básico</CardTitle>
-                    <CardDescription>Ideal para começar</CardDescription>
+                    <CardTitle className="text-xl">{t('payment.basicPlan')}</CardTitle>
+                    <CardDescription>{t('payment.idealToStart')}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -70,29 +73,29 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
                   <div className="text-4xl font-bold gradient-text mb-2">
                     R$ {BASIC_PLAN_PRICE.toFixed(2).replace('.', ',')}
                   </div>
-                  <p className="text-muted-foreground text-sm">Pagamento único</p>
+                  <p className="text-muted-foreground text-sm">{t('payment.oneTimePayment')}</p>
                 </div>
                 
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span><strong>{BASIC_PLAN_CREDITS} créditos</strong> para criar tarefas</span>
+                    <span><strong>{BASIC_PLAN_CREDITS} {t('payment.creditsForTasks')}</strong></span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>Acesso ao Dashboard</span>
+                    <span>{t('payment.dashboardAccess')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>Acesso às Listas</span>
+                    <span>{t('payment.listsAccess')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <CheckCircle2 className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                    <span className="line-through">Acesso ao Kanban</span>
+                    <span className="line-through">{t('payment.kanbanAccess')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <CheckCircle2 className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                    <span className="line-through">Relatórios</span>
+                    <span className="line-through">{t('reports.title')}</span>
                   </div>
                 </div>
 
@@ -102,7 +105,7 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
                 >
                   <span className="flex items-center gap-2">
                     <ExternalLink className="w-4 h-4" />
-                    Assinar Plano Básico
+                    {t('payment.signBasicPlan')}
                   </span>
                 </Button>
               </CardContent>
@@ -112,7 +115,7 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
             <Card className="border-2 border-primary/50 bg-gradient-to-br from-card to-card/50 hover:shadow-xl transition-all duration-300 relative">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 text-yellow-900 text-xs font-bold rounded-full shadow-lg shadow-yellow-500/20">
-                  ⭐ MAIS POPULAR
+                  ⭐ {t('payment.mostPopular')}
                 </span>
               </div>
               <CardHeader>
@@ -121,8 +124,8 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
                     <Sparkles className="w-6 h-6 text-yellow-900" />
                   </div>
                   <div>
-                    <CardTitle className="text-xl">Plano Premium</CardTitle>
-                    <CardDescription>Acesso completo</CardDescription>
+                    <CardTitle className="text-xl">{t('payment.premiumPlan')}</CardTitle>
+                    <CardDescription>{t('payment.fullAccess')}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -131,33 +134,33 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
                   <div className="text-4xl font-bold gradient-text mb-2">
                     R$ {PREMIUM_PLAN_PRICE.toFixed(2).replace('.', ',')}
                   </div>
-                  <p className="text-muted-foreground text-sm">por mês</p>
+                  <p className="text-muted-foreground text-sm">{t('payment.perMonth')}</p>
                 </div>
                 
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span><strong>Créditos ilimitados</strong></span>
+                    <span><strong>{t('payment.unlimitedCredits')}</strong></span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>Acesso ao Dashboard</span>
+                    <span>{t('payment.dashboardAccess')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>Acesso às Listas</span>
+                    <span>{t('payment.listsAccess')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>Acesso ao Kanban</span>
+                    <span>{t('payment.kanbanAccess')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>Relatórios Avançados</span>
+                    <span>{t('payment.advancedReports')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>Suporte Prioritário</span>
+                    <span>{t('payment.prioritySupport')}</span>
                   </div>
                 </div>
 
@@ -167,7 +170,7 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
                 >
                   <span className="flex items-center gap-2">
                     <ExternalLink className="w-4 h-4" />
-                    Assinar Plano Premium
+                    {t('payment.signPremiumPlan')}
                   </span>
                 </Button>
               </CardContent>
@@ -176,7 +179,7 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
 
           <div className="mt-6 text-center">
             <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
-              Cancelar
+              {t('common.cancel')}
             </Button>
           </div>
         </CardContent>

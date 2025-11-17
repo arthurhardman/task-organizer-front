@@ -38,7 +38,8 @@ export default function ListsPage() {
       return;
     }
     fetchTasks();
-  }, [user, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]); // Removido router das dependências
 
   const fetchTasks = async () => {
     try {
@@ -61,7 +62,7 @@ export default function ListsPage() {
       fetchTasks();
     } catch (error: any) {
       if (error.response?.status === 403) {
-        toast.error(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        toast.error(error.response?.data?.message || t('tasks.insufficientCredits'));
         setShowPlansModal(true);
         try {
           const userResponse = await api.get('/auth/me');
@@ -73,13 +74,13 @@ export default function ListsPage() {
         }
       } else {
         console.error('Error updating task:', error);
-        toast.error('Erro ao atualizar tarefa');
+        toast.error(t('tasks.errorUpdating'));
       }
     }
   };
 
   const handleDelete = async (taskId: number) => {
-    if (!confirm('Tem certeza que deseja excluir esta tarefa?')) return;
+    if (!confirm(t('tasks.confirmDelete'))) return;
     try {
       const response = await api.delete(`/tasks/${taskId}`);
       if (response.data.creditsRemaining !== undefined) {
@@ -88,7 +89,7 @@ export default function ListsPage() {
       fetchTasks();
     } catch (error: any) {
       if (error.response?.status === 403) {
-        toast.error(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        toast.error(error.response?.data?.message || t('tasks.insufficientCredits'));
         setShowPlansModal(true);
         try {
           const userResponse = await api.get('/auth/me');
@@ -100,7 +101,7 @@ export default function ListsPage() {
         }
       } else {
         console.error('Error deleting task:', error);
-        toast.error('Erro ao deletar tarefa');
+        toast.error(t('tasks.errorDeleting'));
       }
     }
   };
@@ -132,10 +133,10 @@ export default function ListsPage() {
       setShowCreateModal(false);
       setEditingTask(null);
       fetchTasks();
-      toast.success(editingTask ? 'Tarefa atualizada com sucesso!' : 'Tarefa criada com sucesso!');
+      toast.success(editingTask ? t('tasks.taskUpdated') : t('tasks.taskCreated'));
     } catch (error: any) {
       if (error.response?.status === 403) {
-        toast.error(error.response?.data?.message || 'Créditos insuficientes para esta ação');
+        toast.error(error.response?.data?.message || t('tasks.insufficientCredits'));
         setShowPlansModal(true);
         try {
           const userResponse = await api.get('/auth/me');
@@ -147,7 +148,7 @@ export default function ListsPage() {
         }
       } else {
         console.error('Error saving task:', error);
-        toast.error('Erro ao salvar tarefa');
+        toast.error(t('tasks.errorSaving'));
       }
     }
   };
@@ -162,7 +163,7 @@ export default function ListsPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-4xl font-bold gradient-text mb-2">{t('lists.title')}</h1>
-            <p className="text-muted-foreground">Visualize todas as suas tarefas em lista</p>
+            <p className="text-muted-foreground">{t('lists.description')}</p>
           </div>
           <Button 
             onClick={() => setShowCreateModal(true)}
@@ -202,7 +203,7 @@ export default function ListsPage() {
                       defaultValue={editingTask?.title}
                       className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
                       required
-                      placeholder="Nome da tarefa"
+                      placeholder={t('tasks.taskNamePlaceholder')}
                     />
                   </div>
                   <div className="space-y-2">
@@ -212,7 +213,7 @@ export default function ListsPage() {
                       defaultValue={editingTask?.description || ''}
                       className="w-full px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none placeholder:text-muted-foreground"
                       rows={3}
-                      placeholder="Descrição da tarefa (opcional)"
+                      placeholder={t('tasks.taskDescriptionPlaceholder')}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -238,7 +239,7 @@ export default function ListsPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-semibold text-foreground">Horário</label>
+                      <label className="text-sm font-semibold text-foreground">{t('tasks.dueTime')}</label>
                       <input
                         name="due_time"
                         type="time"

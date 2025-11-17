@@ -116,7 +116,7 @@ export default function SettingsPage() {
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2">
               <span className="text-2xl">⭐</span>
-              Assinatura Premium
+              {t('payment.title')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -127,11 +127,11 @@ export default function SettingsPage() {
                   {subscriptionStatus?.isPremium ? (
                     <span className="flex items-center gap-2">
                       <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-yellow-900 text-sm font-bold rounded-full">
-                        ⭐ Premium Ativo
+                        ⭐ {t('payment.premiumActive')}
                       </span>
                     </span>
                   ) : (
-                    <span className="text-muted-foreground">Plano Gratuito</span>
+                    <span className="text-muted-foreground">{t('payment.freePlan')}</span>
                   )}
                 </p>
               </div>
@@ -141,17 +141,17 @@ export default function SettingsPage() {
                   {subscriptionStatus.subscription.expires_at && (
                     <>
                       <div className="flex items-center justify-between">
-                        <p className="text-sm text-muted-foreground">Expira em:</p>
+                        <p className="text-sm text-muted-foreground">{t('payment.expiresIn')}</p>
                         <p className="font-semibold">
                           {subscriptionStatus.subscription.isExpired ? (
                             <span className="text-destructive flex items-center gap-1">
                               <XCircle className="w-4 h-4" />
-                              Expirada
+                              {t('payment.expired')}
                             </span>
                           ) : subscriptionStatus.subscription.daysUntilExpiry !== null ? (
                             <span className="text-primary flex items-center gap-1">
                               <Clock className="w-4 h-4" />
-                              {subscriptionStatus.subscription.daysUntilExpiry} {subscriptionStatus.subscription.daysUntilExpiry === 1 ? 'dia' : 'dias'}
+                              {subscriptionStatus.subscription.daysUntilExpiry} {subscriptionStatus.subscription.daysUntilExpiry === 1 ? t('payment.day') : t('payment.days')}
                             </span>
                           ) : (
                             <span className="text-muted-foreground">-</span>
@@ -169,7 +169,7 @@ export default function SettingsPage() {
               {(!subscriptionStatus?.isPremium || subscriptionStatus?.subscription?.isExpired) && (
                 <Link href="/payment">
                   <Button className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg shadow-primary/20">
-                    {subscriptionStatus?.subscription?.isExpired ? 'Renovar Assinatura' : 'Fazer Upgrade para Premium'}
+                    {subscriptionStatus?.subscription?.isExpired ? t('payment.renewSubscription') : t('payment.upgradeToPremium')}
                   </Button>
                 </Link>
               )}

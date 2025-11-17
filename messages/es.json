@@ -14,14 +14,18 @@
     "create": "Crear",
     "loading": "Cargando...",
     "error": "Error",
-    "success": "Éxito"
+    "success": "Éxito",
+    "credits": "créditos",
+    "premium": "Premium"
   },
   "auth": {
     "loginTitle": "Inicia sesión en tu cuenta",
     "registerTitle": "Crea tu cuenta",
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "dontHaveAccount": "¿No tienes una cuenta?",
-    "forgotPassword": "¿Olvidaste tu contraseña?"
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "loginDescription": "Inicia sesión en tu cuenta para continuar",
+    "registerDescription": "Crea tu cuenta y comienza a organizar tus tareas"
   },
   "tasks": {
     "title": "Tareas",
@@ -32,29 +36,46 @@
     "status": "Estado",
     "priority": "Prioridad",
     "dueDate": "Fecha de Vencimiento",
+    "dueTime": "Hora",
     "todo": "Por Hacer",
     "inProgress": "En Progreso",
     "done": "Hecho",
     "low": "Baja",
     "medium": "Media",
     "high": "Alta",
-    "noTasks": "No se encontraron tareas"
+    "noTasks": "No se encontraron tareas",
+    "taskNamePlaceholder": "Nombre de la tarea",
+    "taskDescriptionPlaceholder": "Descripción de la tarea (opcional)",
+    "taskUpdated": "¡Tarea actualizada con éxito!",
+    "taskCreated": "¡Tarea creada con éxito!",
+    "insufficientCredits": "Créditos insuficientes para esta acción",
+    "errorUpdating": "Error al actualizar tarea",
+    "errorDeleting": "Error al eliminar tarea",
+    "errorSaving": "Error al guardar tarea",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar esta tarea?"
   },
   "dashboard": {
     "title": "Panel",
     "today": "Hoy",
     "thisWeek": "Esta Semana",
     "upcoming": "Próximas",
-    "overdue": "Atrasadas"
+    "overdue": "Atrasadas",
+    "description": "Organiza tus tareas de forma eficiente",
+    "tasks": "Tareas",
+    "noOverdueTasks": "✨ No hay tareas atrasadas"
   },
   "kanban": {
     "title": "Kanban",
     "todo": "Por Hacer",
     "inProgress": "En Progreso",
-    "done": "Hecho"
+    "done": "Hecho",
+    "description": "Organiza tus tareas en columnas",
+    "allPremiumFeatures": "Todas las funciones premium",
+    "noCreditLimit": "Sin límite de créditos"
   },
   "lists": {
-    "title": "Listas"
+    "title": "Listas",
+    "description": "Visualiza todas tus tareas en lista"
   },
   "payment": {
     "title": "Suscripción Premium",
@@ -63,7 +84,39 @@
     "premiumRequired": "Función Premium",
     "upgradeMessage": "Actualiza para acceder a esta función",
     "kanbanBlocked": "Kanban es una función Premium",
-    "kanbanBlockedMessage": "Para usar Kanban, necesitas tener una suscripción Premium activa. ¡Actualiza ahora y desbloquea todas las funciones!"
+    "kanbanBlockedMessage": "Para usar Kanban, necesitas tener una suscripción Premium activa. ¡Actualiza ahora y desbloquea todas las funciones!",
+    "alreadyPremium": "¡Ya eres Premium!",
+    "enjoyResources": "Disfruta de todos los recursos disponibles.",
+    "unlockPremium": "Desbloquea todos los recursos premium",
+    "basicPlan": "Plan Básico",
+    "premiumPlan": "Plan Premium",
+    "idealToStart": "Ideal para empezar",
+    "fullAccess": "Acceso completo",
+    "oneTimePayment": "Pago único",
+    "perMonth": "por mes",
+    "creditsForTasks": "créditos para crear tareas",
+    "unlimitedCredits": "Créditos ilimitados",
+    "dashboardAccess": "Acceso al Panel",
+    "listsAccess": "Acceso a las Listas",
+    "kanbanAccess": "Acceso al Kanban",
+    "advancedReports": "Informes Avanzados",
+    "prioritySupport": "Soporte Prioritario",
+    "signBasicPlan": "Suscribirse al Plan Básico",
+    "signPremiumPlan": "Suscribirse al Plan Premium",
+    "choosePlan": "Elige tu Plan",
+    "creditsRemaining": "Tienes {credits} créditos restantes",
+    "mostPopular": "MÁS POPULAR",
+    "premiumActivated": "¡Tu suscripción Premium ha sido activada. Disfruta de todos los recursos!",
+    "premiumActive": "Premium Activo",
+    "freePlan": "Plan Gratuito",
+    "expiresIn": "Expira en:",
+    "expired": "Expirada",
+    "day": "día",
+    "days": "días",
+    "renewSubscription": "Renovar Suscripción",
+    "upgradeToPremium": "Actualizar a Premium",
+    "paymentSuccess": "¡Pago Realizado con Éxito!",
+    "goToDashboard": "Ir al Panel"
   },
   "navigation": {
     "dashboard": "Panel",

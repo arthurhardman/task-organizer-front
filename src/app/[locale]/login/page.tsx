@@ -27,7 +27,8 @@ export default function LoginPage() {
     if (user) {
       router.push('/dashboard');
     }
-  }, [user, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]); // Removido router das dependências
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +70,7 @@ export default function LoginPage() {
             {isLogin ? t('auth.loginTitle') : t('auth.registerTitle')}
           </CardTitle>
           <CardDescription className="text-center">
-            {isLogin ? 'Entre na sua conta para continuar' : 'Crie sua conta e comece a organizar suas tarefas'}
+            {isLogin ? t('auth.loginDescription') : t('auth.registerDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>

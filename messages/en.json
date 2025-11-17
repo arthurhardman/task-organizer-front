@@ -14,14 +14,18 @@
     "create": "Create",
     "loading": "Loading...",
     "error": "Error",
-    "success": "Success"
+    "success": "Success",
+    "credits": "credits",
+    "premium": "Premium"
   },
   "auth": {
     "loginTitle": "Login to your account",
     "registerTitle": "Create your account",
     "alreadyHaveAccount": "Already have an account?",
     "dontHaveAccount": "Don't have an account?",
-    "forgotPassword": "Forgot password?"
+    "forgotPassword": "Forgot password?",
+    "loginDescription": "Sign in to your account to continue",
+    "registerDescription": "Create your account and start organizing your tasks"
   },
   "tasks": {
     "title": "Tasks",
@@ -32,29 +36,46 @@
     "status": "Status",
     "priority": "Priority",
     "dueDate": "Due Date",
+    "dueTime": "Time",
     "todo": "To Do",
     "inProgress": "In Progress",
     "done": "Done",
     "low": "Low",
     "medium": "Medium",
     "high": "High",
-    "noTasks": "No tasks found"
+    "noTasks": "No tasks found",
+    "taskNamePlaceholder": "Task name",
+    "taskDescriptionPlaceholder": "Task description (optional)",
+    "taskUpdated": "Task updated successfully!",
+    "taskCreated": "Task created successfully!",
+    "insufficientCredits": "Insufficient credits for this action",
+    "errorUpdating": "Error updating task",
+    "errorDeleting": "Error deleting task",
+    "errorSaving": "Error saving task",
+    "confirmDelete": "Are you sure you want to delete this task?"
   },
   "dashboard": {
     "title": "Dashboard",
     "today": "Today",
     "thisWeek": "This Week",
     "upcoming": "Upcoming",
-    "overdue": "Overdue"
+    "overdue": "Overdue",
+    "description": "Organize your tasks efficiently",
+    "tasks": "Tasks",
+    "noOverdueTasks": "✨ No overdue tasks"
   },
   "kanban": {
     "title": "Kanban",
     "todo": "To Do",
     "inProgress": "In Progress",
-    "done": "Done"
+    "done": "Done",
+    "description": "Organize your tasks in columns",
+    "allPremiumFeatures": "All premium features",
+    "noCreditLimit": "No credit limit"
   },
   "lists": {
-    "title": "Lists"
+    "title": "Lists",
+    "description": "View all your tasks in a list"
   },
   "payment": {
     "title": "Premium Subscription",
@@ -63,7 +84,39 @@
     "premiumRequired": "Premium Feature",
     "upgradeMessage": "Upgrade to access this feature",
     "kanbanBlocked": "Kanban is a Premium feature",
-    "kanbanBlockedMessage": "To use Kanban, you need to have an active Premium subscription. Upgrade now and unlock all features!"
+    "kanbanBlockedMessage": "To use Kanban, you need to have an active Premium subscription. Upgrade now and unlock all features!",
+    "alreadyPremium": "You are already Premium!",
+    "enjoyResources": "Enjoy all available resources.",
+    "unlockPremium": "Unlock all premium resources",
+    "basicPlan": "Basic Plan",
+    "premiumPlan": "Premium Plan",
+    "idealToStart": "Ideal to start",
+    "fullAccess": "Full access",
+    "oneTimePayment": "One-time payment",
+    "perMonth": "per month",
+    "creditsForTasks": "credits to create tasks",
+    "unlimitedCredits": "Unlimited credits",
+    "dashboardAccess": "Dashboard Access",
+    "listsAccess": "Lists Access",
+    "kanbanAccess": "Kanban Access",
+    "advancedReports": "Advanced Reports",
+    "prioritySupport": "Priority Support",
+    "signBasicPlan": "Subscribe Basic Plan",
+    "signPremiumPlan": "Subscribe Premium Plan",
+    "choosePlan": "Choose your Plan",
+    "creditsRemaining": "You have {credits} credits remaining",
+    "mostPopular": "MOST POPULAR",
+    "premiumActivated": "Your Premium subscription has been activated. Enjoy all resources!",
+    "premiumActive": "Premium Active",
+    "freePlan": "Free Plan",
+    "expiresIn": "Expires in:",
+    "expired": "Expired",
+    "day": "day",
+    "days": "days",
+    "renewSubscription": "Renew Subscription",
+    "upgradeToPremium": "Upgrade to Premium",
+    "paymentSuccess": "Payment Successful!",
+    "goToDashboard": "Go to Dashboard"
   },
   "navigation": {
     "dashboard": "Dashboard",

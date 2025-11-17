@@ -51,8 +51,8 @@ export default function PaymentPage() {
           <Card>
             <CardContent className="p-6 text-center">
               <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold mb-2">Você já é Premium!</h2>
-              <p className="text-muted-foreground">Aproveite todos os recursos disponíveis.</p>
+              <h2 className="text-2xl font-bold mb-2">{t('payment.alreadyPremium')}</h2>
+              <p className="text-muted-foreground">{t('payment.enjoyResources')}</p>
             </CardContent>
           </Card>
         </div>
@@ -64,7 +64,8 @@ export default function PaymentPage() {
     if (!user) {
       router.push('/login');
     }
-  }, [user, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]); // Removido router das dependências
 
   if (!user) {
     return null; // Será redirecionado pelo useEffect
@@ -75,7 +76,7 @@ export default function PaymentPage() {
       <div className="max-w-2xl mx-auto space-y-8 animate-in">
         <div>
           <h1 className="text-4xl font-bold gradient-text mb-2">{t('payment.title')}</h1>
-          <p className="text-muted-foreground">Desbloqueie todos os recursos premium</p>
+          <p className="text-muted-foreground">{t('payment.unlockPremium')}</p>
         </div>
         
         <div className="grid md:grid-cols-2 gap-6">
@@ -87,37 +88,37 @@ export default function PaymentPage() {
                   <Coins className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl">Plano Básico</CardTitle>
-                  <CardDescription className="text-sm mt-1">Ideal para começar</CardDescription>
+                  <CardTitle className="text-xl">{t('payment.basicPlan')}</CardTitle>
+                  <CardDescription className="text-sm mt-1">{t('payment.idealToStart')}</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="text-center">
                 <div className="text-4xl font-bold gradient-text mb-2">R$ 24,90</div>
-                <p className="text-muted-foreground text-sm">Pagamento único</p>
+                <p className="text-muted-foreground text-sm">{t('payment.oneTimePayment')}</p>
               </div>
               
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span><strong>50 créditos</strong> para criar tarefas</span>
+                  <span><strong>50 {t('payment.creditsForTasks')}</strong></span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>Acesso ao Dashboard</span>
+                  <span>{t('payment.dashboardAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>Acesso às Listas</span>
+                  <span>{t('payment.listsAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <CheckCircle className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  <span className="line-through">Acesso ao Kanban</span>
+                  <span className="line-through">{t('payment.kanbanAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <CheckCircle className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  <span className="line-through">Relatórios</span>
+                  <span className="line-through">{t('reports.title')}</span>
                 </div>
               </div>
 
@@ -134,7 +135,7 @@ export default function PaymentPage() {
                 ) : (
                   <span className="flex items-center gap-2">
                     <ExternalLink className="w-4 h-4" />
-                    Assinar Plano Básico
+                    {t('payment.signBasicPlan')}
                   </span>
                 )}
               </Button>
@@ -145,7 +146,7 @@ export default function PaymentPage() {
           <Card className="border-2 border-primary/50 bg-gradient-to-br from-card to-card/50 shadow-xl hover:shadow-2xl transition-all duration-300 relative">
             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
               <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 text-yellow-900 text-xs font-bold rounded-full shadow-lg shadow-yellow-500/20">
-                ⭐ MAIS POPULAR
+                ⭐ {t('payment.mostPopular')}
               </span>
             </div>
             <CardHeader className="pb-6">
@@ -154,41 +155,41 @@ export default function PaymentPage() {
                   <Sparkles className="w-6 h-6 text-yellow-900" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl">Plano Premium</CardTitle>
-                  <CardDescription className="text-sm mt-1">Acesso completo</CardDescription>
+                  <CardTitle className="text-xl">{t('payment.premiumPlan')}</CardTitle>
+                  <CardDescription className="text-sm mt-1">{t('payment.fullAccess')}</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="text-center">
                 <div className="text-4xl font-bold gradient-text mb-2">R$ 39,90</div>
-                <p className="text-muted-foreground text-sm">por mês</p>
+                <p className="text-muted-foreground text-sm">{t('payment.perMonth')}</p>
               </div>
               
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span><strong>Créditos ilimitados</strong></span>
+                  <span><strong>{t('payment.unlimitedCredits')}</strong></span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>Acesso ao Dashboard</span>
+                  <span>{t('payment.dashboardAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>Acesso às Listas</span>
+                  <span>{t('payment.listsAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>Acesso ao Kanban</span>
+                  <span>{t('payment.kanbanAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>Relatórios Avançados</span>
+                  <span>{t('payment.advancedReports')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>Suporte Prioritário</span>
+                  <span>{t('payment.prioritySupport')}</span>
                 </div>
               </div>
 
@@ -205,7 +206,7 @@ export default function PaymentPage() {
                 ) : (
                   <span className="flex items-center gap-2">
                     <ExternalLink className="w-4 h-4" />
-                    Assinar Plano Premium
+                    {t('payment.signPremiumPlan')}
                   </span>
                 )}
               </Button>

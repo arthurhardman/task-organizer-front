@@ -174,7 +174,7 @@ export default function ReportsPage() {
                   <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20 p-6 rounded-lg space-y-3">
                     <div className="flex items-center justify-center gap-2">
                       <Sparkles className="w-5 h-5 text-primary" />
-                      <span className="text-2xl font-bold gradient-text">R$ 29,90</span>
+                      <span className="text-2xl font-bold gradient-text">R$ 39,90</span>
                       <span className="text-muted-foreground">/mês</span>
                     </div>
                     <ul className="text-sm text-muted-foreground space-y-1 text-left">

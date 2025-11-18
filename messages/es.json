@@ -82,7 +82,7 @@
     "columnName": "Nombre de la columna",
     "statusId": "Estado",
     "statusIdPlaceholder": "ID (ej: pendiente)",
-    "statusIdHint": "Selecciona un estado disponible. Cada estado solo puede usarse una vez.",
+    "statusIdHint": "Selecciona un estado. Puedes crear múltiples columnas con el mismo estado.",
     "selectStatus": "Selecciona un estado",
     "columnCreated": "¡Columna creada!",
     "columnUpdated": "¡Columna actualizada!",

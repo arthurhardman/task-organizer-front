@@ -82,7 +82,7 @@
     "columnName": "Nome da coluna",
     "statusId": "Status",
     "statusIdPlaceholder": "ID (ex: pendente)",
-    "statusIdHint": "Selecione um status disponível. Cada status só pode ser usado uma vez.",
+    "statusIdHint": "Selecione um status. Você pode criar múltiplas colunas com o mesmo status.",
     "selectStatus": "Selecione um status",
     "columnCreated": "Coluna criada!",
     "columnUpdated": "Coluna atualizada!",

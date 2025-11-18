@@ -120,11 +120,7 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
       return;
     }
 
-    // Verificar se já existe uma coluna com esse status_id
-    if (columns.some(col => col.status_id.toUpperCase() === newColumnStatusId.toUpperCase())) {
-      toast.error(t('kanban.statusIdExists') || 'Já existe uma coluna com esse status');
-      return;
-    }
+    // Permitir múltiplas colunas com o mesmo status - removida validação de duplicata
 
     try {
       setSaving(true);
@@ -390,13 +386,11 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
                       className="flex-1 px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                     >
                       <option value="">{t('kanban.selectStatus') || 'Selecione um status'}</option>
-                      {allowedStatuses
-                        .filter(status => !columns.some(col => col.status_id.toUpperCase() === status.id.toUpperCase()))
-                        .map((status) => (
-                          <option key={status.id} value={status.id}>
-                            {status.name} ({status.id})
-                          </option>
-                        ))}
+                      {allowedStatuses.map((status) => (
+                        <option key={status.id} value={status.id}>
+                          {status.name} ({status.id})
+                        </option>
+                      ))}
                     </select>
                     <Button
                       onClick={handleCreateColumn}
@@ -411,7 +405,7 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
                     </Button>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {t('kanban.statusIdHint') || 'Selecione um status disponível. Cada status só pode ser usado uma vez.'}
+                    {t('kanban.statusIdHint') || 'Selecione um status. Você pode criar múltiplas colunas com o mesmo status.'}
                   </p>
                 </div>
               </>

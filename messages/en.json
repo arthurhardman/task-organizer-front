@@ -82,7 +82,7 @@
     "columnName": "Column name",
     "statusId": "Status",
     "statusIdPlaceholder": "ID (e.g: pending)",
-    "statusIdHint": "Select an available status. Each status can only be used once.",
+    "statusIdHint": "Select a status. You can create multiple columns with the same status.",
     "selectStatus": "Select a status",
     "columnCreated": "Column created!",
     "columnUpdated": "Column updated!",

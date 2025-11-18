@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
-import { Users, UserPlus, Trash2, AlertCircle, CheckCircle, X } from 'lucide-react';
+import { Users, UserPlus, Trash2, AlertCircle, CheckCircle, X, Mail, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/toast';
 import { ConfirmModal } from '@/components/ConfirmModal';
 
@@ -21,6 +21,13 @@ interface BusinessUser {
   is_business: boolean;
   team_count: number;
   created_at: string;
+}
+
+interface BusinessInvitation {
+  id: number;
+  email: string;
+  created_at: string;
+  invited_by_name: string | null;
 }
 
 interface BusinessInfo {
@@ -42,12 +49,18 @@ export default function BusinessUsersPage() {
   const router = useRouter();
   const { user } = useAuthStore();
   const [users, setUsers] = useState<BusinessUser[]>([]);
+  const [invitations, setInvitations] = useState<BusinessInvitation[]>([]);
   const [businessInfo, setBusinessInfo] = useState<BusinessInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [showAddExtraModal, setShowAddExtraModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteLoading, setInviteLoading] = useState(false);
   const [extraUsersCount, setExtraUsersCount] = useState(1);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteInviteModal, setShowDeleteInviteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState<number | null>(null);
+  const [inviteToDelete, setInviteToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -62,6 +75,7 @@ export default function BusinessUsersPage() {
 
     fetchBusinessInfo();
     fetchUsers();
+    fetchInvitations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, user?.isAdmin]);
 
@@ -84,6 +98,57 @@ export default function BusinessUsersPage() {
     } catch (error) {
       console.error('Error fetching users:', error);
       toast.error('Erro ao carregar usuários');
+    }
+  };
+
+  const fetchInvitations = async () => {
+    try {
+      const response = await api.get('/business/users/invitations');
+      setInvitations(response.data);
+    } catch (error) {
+      console.error('Error fetching invitations:', error);
+      toast.error('Erro ao carregar convites');
+    }
+  };
+
+  const handleInviteUser = async () => {
+    if (!inviteEmail || !inviteEmail.includes('@')) {
+      toast.error('Por favor, insira um email válido');
+      return;
+    }
+
+    setInviteLoading(true);
+    try {
+      await api.post('/business/users/invite', {
+        email: inviteEmail,
+      });
+      
+      toast.success('Convite enviado com sucesso! O usuário poderá se registrar com este email.');
+      setShowInviteModal(false);
+      setInviteEmail('');
+      fetchInvitations();
+      fetchBusinessInfo();
+    } catch (error: any) {
+      console.error('Error inviting user:', error);
+      toast.error(error.response?.data?.error || 'Erro ao convidar usuário');
+    } finally {
+      setInviteLoading(false);
+    }
+  };
+
+  const handleDeleteInvitation = async () => {
+    if (!inviteToDelete) return;
+
+    try {
+      await api.delete(`/business/users/invitations/${inviteToDelete}`);
+      toast.success('Convite removido com sucesso!');
+      setShowDeleteInviteModal(false);
+      setInviteToDelete(null);
+      fetchInvitations();
+      fetchBusinessInfo();
+    } catch (error: any) {
+      console.error('Error deleting invitation:', error);
+      toast.error(error.response?.data?.error || 'Erro ao remover convite');
     }
   };
 
@@ -198,13 +263,69 @@ export default function BusinessUsersPage() {
                     </div>
                   )}
 
-                  <Button
-                    onClick={() => setShowAddExtraModal(true)}
-                    className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white"
-                  >
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Adicionar Usuários Extras
-                  </Button>
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => setShowInviteModal(true)}
+                      className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white"
+                    >
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Convidar Usuário
+                    </Button>
+                    <Button
+                      onClick={() => setShowAddExtraModal(true)}
+                      variant="outline"
+                      className="border-primary text-primary hover:bg-primary/10"
+                    >
+                      Adicionar Usuários Extras
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Lista de Convites Pendentes */}
+            {invitations.length > 0 && (
+              <Card className="border-border/50 bg-gradient-to-br from-card to-card/50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Mail className="w-5 h-5 text-primary" />
+                    Convites Pendentes
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {invitations.map((invitation) => (
+                      <div
+                        key={invitation.id}
+                        className="flex items-center justify-between p-4 border border-yellow-500/30 bg-yellow-500/5 rounded-lg"
+                      >
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <Mail className="w-4 h-4 text-yellow-500" />
+                            <p className="font-semibold">{invitation.email}</p>
+                            <span className="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-500/20 text-yellow-600">
+                              Pendente
+                            </span>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Convidado em {new Date(invitation.created_at).toLocaleDateString('pt-BR')}
+                            {invitation.invited_by_name && ` por ${invitation.invited_by_name}`}
+                          </p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setInviteToDelete(invitation.id);
+                            setShowDeleteInviteModal(true);
+                          }}
+                          className="text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
             )}
@@ -256,9 +377,9 @@ export default function BusinessUsersPage() {
                       )}
                     </div>
                   ))}
-                  {users.length === 0 && (
+                  {users.length === 0 && invitations.length === 0 && (
                     <p className="text-center text-muted-foreground py-8">
-                      Nenhum usuário encontrado
+                      Nenhum usuário encontrado. Convide usuários para começar!
                     </p>
                   )}
                 </div>
@@ -329,6 +450,85 @@ export default function BusinessUsersPage() {
           </div>
         )}
 
+        {/* Modal de convidar usuário */}
+        {showInviteModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in">
+            <Card className="bg-card/95 backdrop-blur-xl border-border/50 shadow-2xl max-w-md w-full m-4 animate-slide-up">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2">
+                    <UserPlus className="w-5 h-5 text-primary" />
+                    Convidar Usuário
+                  </CardTitle>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      setShowInviteModal(false);
+                      setInviteEmail('');
+                    }}
+                    className="h-8 w-8 rounded-full"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+                <CardDescription>
+                  Digite o email da pessoa que deseja convidar. Ela poderá se registrar e entrar automaticamente na empresa.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <label className="text-sm font-semibold mb-2 block">
+                    Email <span className="text-red-500">*</span>
+                  </label>
+                  <Input
+                    type="email"
+                    placeholder="usuario@exemplo.com"
+                    value={inviteEmail}
+                    onChange={(e) => setInviteEmail(e.target.value)}
+                    className="w-full"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && inviteEmail && !inviteLoading) {
+                        handleInviteUser();
+                      }
+                    }}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    A pessoa receberá acesso à empresa quando se registrar com este email
+                  </p>
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <Button
+                    onClick={handleInviteUser}
+                    className="flex-1 bg-primary"
+                    disabled={inviteLoading || !inviteEmail || !inviteEmail.includes('@')}
+                  >
+                    {inviteLoading ? (
+                      <span className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Enviando...
+                      </span>
+                    ) : (
+                      'Enviar Convite'
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowInviteModal(false);
+                      setInviteEmail('');
+                    }}
+                    className="flex-1"
+                    disabled={inviteLoading}
+                  >
+                    Cancelar
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         <ConfirmModal
           isOpen={showDeleteModal}
           onClose={() => {
@@ -338,6 +538,20 @@ export default function BusinessUsersPage() {
           onConfirm={handleDeleteUser}
           title="Confirmar Remoção"
           description="Tem certeza que deseja remover este usuário da empresa? Esta ação não pode ser desfeita."
+          confirmText="Remover"
+          cancelText="Cancelar"
+          variant="destructive"
+        />
+
+        <ConfirmModal
+          isOpen={showDeleteInviteModal}
+          onClose={() => {
+            setShowDeleteInviteModal(false);
+            setInviteToDelete(null);
+          }}
+          onConfirm={handleDeleteInvitation}
+          title="Confirmar Remoção de Convite"
+          description="Tem certeza que deseja remover este convite? A pessoa não poderá mais se registrar com este email na empresa."
           confirmText="Remover"
           cancelText="Cancelar"
           variant="destructive"

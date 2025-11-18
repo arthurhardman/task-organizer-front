@@ -10,6 +10,8 @@ import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { CheckCircle2, Loader2, ExternalLink, Coins, Sparkles, CheckCircle, AlertCircle, Mail, Building2, X } from 'lucide-react';
 import { PlansModal } from '@/components/PlansModal';
+import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/toast';
 
 const BASIC_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/RNCPqNAHkEGRn21iIW2s'; // Plano Básico
 const PREMIUM_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/udNaQ9Xhb037aDqoYMvm'; // Plano Premium
@@ -20,6 +22,12 @@ export default function PaymentPage() {
   const router = useRouter();
   const { user, updateUser } = useAuthStore();
   const [loading, setLoading] = useState(false);
+  const [showBusinessModal, setShowBusinessModal] = useState(false);
+  const [businessData, setBusinessData] = useState({
+    razao_social: '',
+    cnpj: '',
+  });
+  const [businessLoading, setBusinessLoading] = useState(false);
 
   const handleRedirectToCheckout = (checkoutUrl: string) => {
     if (!user) return;
@@ -27,6 +35,53 @@ export default function PaymentPage() {
     setLoading(true);
     // Redirecionar diretamente para o checkout do GGCheckout
     window.location.href = checkoutUrl;
+  };
+
+  const handleBusinessCheckout = async () => {
+    if (!businessData.razao_social || !businessData.cnpj) {
+      toast.error('Por favor, preencha todos os campos obrigatórios');
+      return;
+    }
+
+    setBusinessLoading(true);
+    try {
+      // Preparar dados da empresa antes de redirecionar
+      await api.post('/payments/business/prepare', {
+        razao_social: businessData.razao_social,
+        cnpj: businessData.cnpj,
+        email: user?.email,
+      });
+
+      // Fechar modal e redirecionar para checkout
+      setShowBusinessModal(false);
+      setLoading(true);
+      window.location.href = BUSINESS_CHECKOUT_URL;
+    } catch (error: any) {
+      console.error('Error preparing business data:', error);
+      toast.error(error.response?.data?.error || 'Erro ao preparar dados da empresa');
+    } finally {
+      setBusinessLoading(false);
+    }
+  };
+
+  const formatCNPJ = (value: string) => {
+    // Remove tudo que não é dígito
+    const numbers = value.replace(/\D/g, '');
+    
+    // Aplica a máscara: XX.XXX.XXX/XXXX-XX
+    if (numbers.length <= 14) {
+      return numbers
+        .replace(/^(\d{2})(\d)/, '$1.$2')
+        .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+        .replace(/\.(\d{3})(\d)/, '.$1/$2')
+        .replace(/(\d{4})(\d)/, '$1-$2');
+    }
+    return value;
+  };
+
+  const handleCNPJChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatCNPJ(e.target.value);
+    setBusinessData({ ...businessData, cnpj: formatted });
   };
 
   // Verificar status do pagamento ao retornar
@@ -294,11 +349,11 @@ export default function PaymentPage() {
               </div>
 
               <Button
-                onClick={() => handleRedirectToCheckout(BUSINESS_CHECKOUT_URL)}
+                onClick={() => setShowBusinessModal(true)}
                 className="w-full h-12 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold shadow-lg shadow-purple-500/20 transition-all duration-300 hover:scale-[1.02]"
-                disabled={loading}
+                disabled={loading || businessLoading}
               >
-                {loading ? (
+                {loading || businessLoading ? (
                   <span className="flex items-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin" />
                     {t('common.loading')}
@@ -313,6 +368,96 @@ export default function PaymentPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Modal para coletar dados da empresa (Business) */}
+        {showBusinessModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in">
+            <Card className="bg-card/95 backdrop-blur-xl border-border/50 shadow-2xl max-w-md w-full m-4 animate-slide-up">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2">
+                    <Building2 className="w-5 h-5 text-purple-500" />
+                    Dados da Empresa
+                  </CardTitle>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      setShowBusinessModal(false);
+                      setBusinessData({ razao_social: '', cnpj: '' });
+                    }}
+                    className="h-8 w-8 rounded-full"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+                <CardDescription>
+                  Preencha os dados da sua empresa para contratar o plano Business
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <label className="text-sm font-semibold mb-2 block">
+                    Razão Social <span className="text-red-500">*</span>
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="Nome da empresa"
+                    value={businessData.razao_social}
+                    onChange={(e) => setBusinessData({ ...businessData, razao_social: e.target.value })}
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold mb-2 block">
+                    CNPJ <span className="text-red-500">*</span>
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="00.000.000/0000-00"
+                    value={businessData.cnpj}
+                    onChange={handleCNPJChange}
+                    maxLength={18}
+                    className="w-full"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Digite apenas os números, a formatação será aplicada automaticamente
+                  </p>
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <Button
+                    onClick={handleBusinessCheckout}
+                    className="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white"
+                    disabled={businessLoading || !businessData.razao_social || !businessData.cnpj}
+                  >
+                    {businessLoading ? (
+                      <span className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Processando...
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <ExternalLink className="w-4 h-4" />
+                        Continuar para Pagamento
+                      </span>
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowBusinessModal(false);
+                      setBusinessData({ razao_social: '', cnpj: '' });
+                    }}
+                    className="flex-1"
+                    disabled={businessLoading}
+                  >
+                    Cancelar
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </Layout>
   );

@@ -56,9 +56,14 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
 
   const handleSaveColumn = async (column: KanbanColumn) => {
     try {
+      // Garantir que position é um número válido
+      const position = typeof column.position === 'number' && !isNaN(column.position) 
+        ? column.position 
+        : columns.findIndex(c => c.id === column.id);
+      
       await api.put(`/kanban/columns/${column.id}`, {
         name: column.name,
-        position: column.position,
+        position: position >= 0 ? position : 0,
         color: column.color,
       });
       toast.success(t('kanban.columnUpdated') || 'Coluna atualizada!');
@@ -129,17 +134,29 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
     setColumns(newColumns);
     
     try {
+      // Garantir que todos os valores são números válidos
+      const columnsToUpdate = newColumns.map((col, index) => {
+        const id = typeof col.id === 'number' && !isNaN(col.id) ? col.id : parseInt(String(col.id), 10);
+        const position = typeof index === 'number' && !isNaN(index) ? index : parseInt(String(index), 10);
+        
+        if (isNaN(id) || isNaN(position)) {
+          throw new Error(`Valores inválidos para reordenação: id=${col.id}, position=${index}`);
+        }
+        
+        return {
+          id,
+          position,
+        };
+      });
+      
       await api.put('/kanban/columns/reorder', {
-        columns: newColumns.map((col, index) => ({
-          id: col.id,
-          position: index,
-        })),
+        columns: columnsToUpdate,
       });
       toast.success(t('kanban.columnsReordered') || 'Ordem das colunas atualizada!');
       onColumnsUpdated();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error reordering columns:', error);
-      toast.error(t('kanban.errorReordering') || 'Erro ao reordenar colunas');
+      toast.error(error.response?.data?.error || t('kanban.errorReordering') || 'Erro ao reordenar colunas');
       fetchColumns(); // Reverter em caso de erro
     }
   };

@@ -38,11 +38,12 @@ interface MonthlyReport {
     overdueTasks: number;
     avgTasksPerDay: number;
   };
-  statusStats: {
-    todo: number;
-    inProgress: number;
-    done: number;
-  };
+  statusStats: { [key: string]: number };
+  statusColumns?: Array<{
+    status_id: string;
+    name: string;
+    color: string;
+  }>;
   priorityStats: {
     high: number;
     medium: number;
@@ -73,6 +74,7 @@ export default function ReportsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [statusColumns, setStatusColumns] = useState<Array<{ status_id: string; name: string; color: string }>>([]);
   const hasFetchedRef = useRef(false);
 
   useEffect(() => {
@@ -110,6 +112,10 @@ export default function ReportsPage() {
         `/reports/monthly?year=${selectedYear}&month=${selectedMonth}`
       );
       setReport(response.data);
+      // Atualizar colunas de status se vierem no response
+      if (response.data.statusColumns) {
+        setStatusColumns(response.data.statusColumns);
+      }
     } catch (error: any) {
       if (error.response?.status === 403) {
         // Não é premium
@@ -320,18 +326,47 @@ export default function ReportsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                      <span className="text-sm font-medium">{t('tasks.todo')}</span>
-                      <span className="text-lg font-bold text-blue-500">{report.statusStats.todo}</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                      <span className="text-sm font-medium">{t('tasks.inProgress')}</span>
-                      <span className="text-lg font-bold text-yellow-500">{report.statusStats.inProgress}</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-                      <span className="text-sm font-medium">{t('tasks.done')}</span>
-                      <span className="text-lg font-bold text-green-500">{report.statusStats.done}</span>
-                    </div>
+                    {report.statusColumns && report.statusColumns.length > 0 ? (
+                      report.statusColumns.map((column) => {
+                        const count = report.statusStats[column.status_id] || 0;
+                        const color = column.color || '#3b82f6';
+                        // Converter hex para RGB para usar com opacidade
+                        const r = parseInt(color.slice(1, 3), 16);
+                        const g = parseInt(color.slice(3, 5), 16);
+                        const b = parseInt(color.slice(5, 7), 16);
+                        return (
+                          <div
+                            key={column.status_id}
+                            className="flex items-center justify-between p-3 rounded-lg border transition-all"
+                            style={{
+                              backgroundColor: `${color}10`,
+                              borderColor: `${color}20`,
+                            }}
+                          >
+                            <span className="text-sm font-medium">{column.name}</span>
+                            <span className="text-lg font-bold" style={{ color }}>
+                              {count}
+                            </span>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      // Fallback para status padrão se não houver colunas
+                      <>
+                        <div className="flex items-center justify-between p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                          <span className="text-sm font-medium">{t('tasks.todo')}</span>
+                          <span className="text-lg font-bold text-blue-500">{report.statusStats.todo || 0}</span>
+                        </div>
+                        <div className="flex items-center justify-between p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                          <span className="text-sm font-medium">{t('tasks.inProgress')}</span>
+                          <span className="text-lg font-bold text-yellow-500">{report.statusStats.inProgress || 0}</span>
+                        </div>
+                        <div className="flex items-center justify-between p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                          <span className="text-sm font-medium">{t('tasks.done')}</span>
+                          <span className="text-lg font-bold text-green-500">{report.statusStats.done || 0}</span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -393,17 +428,25 @@ export default function ReportsPage() {
                             >
                               {task.priority}
                             </span>
-                            <span
-                              className={`px-2.5 py-1 text-xs font-semibold rounded-full ${
-                                task.status === 'done'
-                                  ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                                  : task.status === 'inProgress'
-                                  ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
-                                  : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                              }`}
-                            >
-                              {task.status === 'done' ? t('tasks.done') : task.status === 'inProgress' ? t('tasks.inProgress') : t('tasks.todo')}
-                            </span>
+                            {(() => {
+                              const statusColumn = statusColumns.find(c => c.status_id === task.status) || 
+                                (task.status === 'done' ? { name: t('tasks.done'), color: '#22c55e' } :
+                                 task.status === 'inProgress' ? { name: t('tasks.inProgress'), color: '#eab308' } :
+                                 { name: t('tasks.todo'), color: '#3b82f6' });
+                              const color = statusColumn.color || '#3b82f6';
+                              return (
+                                <span
+                                  className="px-2.5 py-1 text-xs font-semibold rounded-full border"
+                                  style={{
+                                    backgroundColor: `${color}20`,
+                                    color: color,
+                                    borderColor: `${color}30`,
+                                  }}
+                                >
+                                  {statusColumn.name}
+                                </span>
+                              );
+                            })()}
                           </div>
                         </div>
                       </div>

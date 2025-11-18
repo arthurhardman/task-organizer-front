@@ -335,7 +335,7 @@ export default function TeamsPage() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>
-                    {t('teams.teamMembers')}: {teams.find(t => t.id === selectedTeam)?.name}
+                    {t('teams.members')}: {teams.find(t => t.id === selectedTeam)?.name}
                   </CardTitle>
                   <div className="flex gap-2">
                     <Button

@@ -139,12 +139,20 @@ export default function PaymentPage() {
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                   <span><strong>50 {t('payment.creditsForTasks')}</strong></span>
                 </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  <span>{t('payment.dashboardAccess')}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  <span>{t('payment.listsAccess')}</span>
+                </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <X className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  <X className="w-4 h-4 text-red-500 flex-shrink-0" />
                   <span className="line-through">{t('payment.kanbanAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <X className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  <X className="w-4 h-4 text-red-500 flex-shrink-0" />
                   <span className="line-through">{t('reports.title')}</span>
                 </div>
               </div>
@@ -200,6 +208,14 @@ export default function PaymentPage() {
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  <span>{t('payment.dashboardAccess')}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  <span>{t('payment.listsAccess')}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                   <span>{t('payment.kanbanAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
@@ -211,11 +227,11 @@ export default function PaymentPage() {
                   <span>{t('payment.prioritySupport')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <X className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  <X className="w-4 h-4 text-red-500 flex-shrink-0" />
                   <span className="line-through">Chamados e Equipes</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <X className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  <X className="w-4 h-4 text-red-500 flex-shrink-0" />
                   <span className="line-through">Gerenciamento de usuários</span>
                 </div>
               </div>
@@ -268,6 +284,14 @@ export default function PaymentPage() {
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                   <span><strong>{t('payment.unlimitedCredits')}</strong></span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  <span>{t('payment.dashboardAccess')}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  <span>{t('payment.listsAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />

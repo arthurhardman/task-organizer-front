@@ -56,16 +56,20 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
 
   const handleSaveColumn = async (column: KanbanColumn) => {
     try {
-      // Garantir que position é um número válido
-      const position = typeof column.position === 'number' && !isNaN(column.position) 
-        ? column.position 
-        : columns.findIndex(c => c.id === column.id);
+      // Buscar a coluna original para preservar o position
+      const originalColumn = columns.find(c => c.id === column.id);
       
-      await api.put(`/kanban/columns/${column.id}`, {
+      // Quando editamos apenas nome e cor, não precisamos enviar position
+      // O position só é atualizado quando reordenamos as colunas
+      const updateData: { name: string; color: string } = {
         name: column.name,
-        position: position >= 0 ? position : 0,
         color: column.color,
-      });
+      };
+      
+      // Não enviar position ao editar - ele será preservado no banco
+      // Apenas enviamos position quando reordenamos explicitamente
+      
+      await api.put(`/kanban/columns/${column.id}`, updateData);
       toast.success(t('kanban.columnUpdated') || 'Coluna atualizada!');
       setEditingColumn(null);
       fetchColumns();

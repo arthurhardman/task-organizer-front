@@ -208,15 +208,15 @@ export default function PaymentPage() {
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  <span><strong>{t('payment.kanbanAccess')}</strong></span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                   <span>{t('payment.dashboardAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                   <span>{t('payment.listsAccess')}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>{t('payment.kanbanAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
@@ -281,25 +281,8 @@ export default function PaymentPage() {
               </div>
               
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span><strong>{t('payment.unlimitedCredits')}</strong></span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>{t('payment.dashboardAccess')}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>{t('payment.listsAccess')}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>{t('payment.kanbanAccess')}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>{t('payment.advancedReports')}</span>
+                <div className="pb-2 border-b border-border/50">
+                  <p className="text-xs text-muted-foreground mb-2">Tudo do Premium +</p>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />

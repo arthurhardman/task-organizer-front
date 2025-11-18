@@ -32,14 +32,25 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
   const [editingColumn, setEditingColumn] = useState<KanbanColumn | null>(null);
   const [newColumnName, setNewColumnName] = useState('');
   const [newColumnStatusId, setNewColumnStatusId] = useState('');
+  const [allowedStatuses, setAllowedStatuses] = useState<Array<{ id: string; name: string; color: string }>>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [columnToDelete, setColumnToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     if (isOpen) {
       fetchColumns();
+      fetchAllowedStatuses();
     }
   }, [isOpen]);
+
+  const fetchAllowedStatuses = async () => {
+    try {
+      const response = await api.get('/kanban/columns/allowed-statuses');
+      setAllowedStatuses(response.data.statuses);
+    } catch (error) {
+      console.error('Error fetching allowed statuses:', error);
+    }
+  };
 
   const fetchColumns = async () => {
     try {
@@ -104,24 +115,25 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
   };
 
   const handleCreateColumn = async () => {
-    if (!newColumnName.trim() || !newColumnStatusId.trim()) {
+    if (!newColumnName.trim() || !newColumnStatusId) {
       toast.error(t('kanban.fillAllFields') || 'Preencha todos os campos');
       return;
     }
 
     // Verificar se já existe uma coluna com esse status_id
-    if (columns.some(col => col.status_id === newColumnStatusId)) {
-      toast.error(t('kanban.statusIdExists') || 'Já existe uma coluna com esse ID de status');
+    if (columns.some(col => col.status_id.toUpperCase() === newColumnStatusId.toUpperCase())) {
+      toast.error(t('kanban.statusIdExists') || 'Já existe uma coluna com esse status');
       return;
     }
 
     try {
       setSaving(true);
+      const selectedStatus = allowedStatuses.find(s => s.id === newColumnStatusId);
       await api.post('/kanban/columns', {
         name: newColumnName,
         status_id: newColumnStatusId,
         position: columns.length,
-        color: '#3b82f6',
+        color: selectedStatus?.color || '#3b82f6',
       });
       toast.success(t('kanban.columnCreated') || 'Coluna criada!');
       setNewColumnName('');
@@ -372,12 +384,20 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
                       placeholder={t('kanban.columnName') || 'Nome da coluna'}
                       className="flex-1"
                     />
-                    <Input
+                    <select
                       value={newColumnStatusId}
-                      onChange={(e) => setNewColumnStatusId(e.target.value.toLowerCase().replace(/\s+/g, ''))}
-                      placeholder={t('kanban.statusIdPlaceholder') || 'ID (ex: pendente)'}
-                      className="flex-1"
-                    />
+                      onChange={(e) => setNewColumnStatusId(e.target.value)}
+                      className="flex-1 px-4 py-2.5 bg-background text-foreground border border-border/50 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                    >
+                      <option value="">{t('kanban.selectStatus') || 'Selecione um status'}</option>
+                      {allowedStatuses
+                        .filter(status => !columns.some(col => col.status_id.toUpperCase() === status.id.toUpperCase()))
+                        .map((status) => (
+                          <option key={status.id} value={status.id}>
+                            {status.name} ({status.id})
+                          </option>
+                        ))}
+                    </select>
                     <Button
                       onClick={handleCreateColumn}
                       disabled={saving || !newColumnName.trim() || !newColumnStatusId.trim()}
@@ -391,7 +411,7 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
                     </Button>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {t('kanban.statusIdHint') || 'O ID deve ser único e será usado como status das tarefas'}
+                    {t('kanban.statusIdHint') || 'Selecione um status disponível. Cada status só pode ser usado uma vez.'}
                   </p>
                 </div>
               </>

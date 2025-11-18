@@ -534,7 +534,7 @@ export default function KanbanPage() {
               {columns.map((column, colIndex) => {
               const columnTasks = getTasksByStatus(column.status_id);
               return (
-                <div key={column.id} className="flex-shrink-0 w-80 space-y-4">
+                <div key={column.id} data-column-id={column.id} className="flex-shrink-0 w-80 space-y-4">
                   <Card className="border-border/50 bg-gradient-to-br from-card to-card/50">
                     <CardHeader className="pb-4">
                       <CardTitle className="flex items-center gap-2 text-lg">
@@ -555,14 +555,37 @@ export default function KanbanPage() {
                         style={{ animationDelay: `${(colIndex * 100) + (index * 50)}ms` }}
                         draggable
                         onDragEnd={(e) => {
-                          const rect = e.currentTarget.getBoundingClientRect();
-                          const x = e.clientX;
-                          const columnWidth = window.innerWidth / columns.length;
-                          const columnIndex = Math.floor(x / columnWidth);
-                          const targetColumn = columns[Math.min(columnIndex, columns.length - 1)];
+                          if (!scrollContainerRef.current) return;
                           
-                          if (targetColumn && targetColumn.status_id !== task.status) {
-                            handleStatusChange(task.id, targetColumn.status_id);
+                          const mouseX = e.clientX;
+                          const containerRect = scrollContainerRef.current.getBoundingClientRect();
+                          
+                          // Encontrar qual coluna está mais próxima do cursor
+                          let closestColumn = column;
+                          let minDistance = Infinity;
+                          
+                          // Verificar todas as colunas para encontrar a mais próxima
+                          columns.forEach((col) => {
+                            // Encontrar o elemento da coluna
+                            const columnElement = scrollContainerRef.current?.querySelector(
+                              `[data-column-id="${col.id}"]`
+                            ) as HTMLElement;
+                            
+                            if (columnElement) {
+                              const colRect = columnElement.getBoundingClientRect();
+                              const colCenterX = colRect.left + colRect.width / 2;
+                              const distance = Math.abs(mouseX - colCenterX);
+                              
+                              if (distance < minDistance) {
+                                minDistance = distance;
+                                closestColumn = col;
+                              }
+                            }
+                          });
+                          
+                          // Só atualizar se mudou de coluna
+                          if (closestColumn && closestColumn.status_id !== task.status) {
+                            handleStatusChange(task.id, closestColumn.status_id);
                           }
                         }}
                       >

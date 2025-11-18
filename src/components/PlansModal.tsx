@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/routing';
-import { CheckCircle2, Coins, Sparkles, ExternalLink, AlertCircle, Mail, Building2 } from 'lucide-react';
+import { CheckCircle2, Coins, Sparkles, ExternalLink, AlertCircle, Mail, Building2, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '@/store/authStore';
 
@@ -94,9 +94,9 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
             </Card>
           )}
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-4">
             {/* Plano Básico */}
-            <Card className="border-border/50 bg-gradient-to-br from-card to-card/50 hover:shadow-xl transition-all duration-300">
+            <Card className="border-border/50 bg-gradient-to-br from-card to-card/50 hover:shadow-xl transition-all duration-300 min-w-[320px]">
               <CardHeader>
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
@@ -121,20 +121,12 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                     <span><strong>{BASIC_PLAN_CREDITS} {t('payment.creditsForTasks')}</strong></span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>{t('payment.dashboardAccess')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>{t('payment.listsAccess')}</span>
-                  </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <X className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                     <span className="line-through">{t('payment.kanbanAccess')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <X className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                     <span className="line-through">{t('reports.title')}</span>
                   </div>
                 </div>
@@ -152,7 +144,7 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
             </Card>
 
             {/* Plano Premium */}
-            <Card className="border-2 border-primary/50 bg-gradient-to-br from-card to-card/50 hover:shadow-xl transition-all duration-300 relative">
+            <Card className="border-2 border-primary/50 bg-gradient-to-br from-card to-card/50 hover:shadow-xl transition-all duration-300 relative min-w-[320px]">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 text-yellow-900 text-xs font-bold rounded-full shadow-lg shadow-yellow-500/20">
                   ⭐ {t('payment.mostPopular')}
@@ -184,14 +176,6 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>{t('payment.dashboardAccess')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>{t('payment.listsAccess')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                     <span>{t('payment.kanbanAccess')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
@@ -201,6 +185,14 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                     <span>{t('payment.prioritySupport')}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <X className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <span className="line-through">Chamados e Equipes</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <X className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <span className="line-through">Gerenciamento de usuários</span>
                   </div>
                 </div>
 
@@ -217,7 +209,7 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
             </Card>
 
             {/* Plano Business */}
-            <Card className="border-2 border-purple-500/50 bg-gradient-to-br from-card to-card/50 hover:shadow-xl transition-all duration-300 relative">
+            <Card className="border-2 border-purple-500/50 bg-gradient-to-br from-card to-card/50 hover:shadow-xl transition-all duration-300 relative min-w-[320px]">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="px-3 py-1 bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 text-white text-xs font-bold rounded-full shadow-lg shadow-purple-500/20">
                   🏢 Business
@@ -246,14 +238,6 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                     <span><strong>{t('payment.unlimitedCredits')}</strong></span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>{t('payment.dashboardAccess')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>{t('payment.listsAccess')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />

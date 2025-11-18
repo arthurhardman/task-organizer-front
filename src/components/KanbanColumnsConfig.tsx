@@ -56,18 +56,24 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
 
   const handleSaveColumn = async (column: KanbanColumn) => {
     try {
-      // Buscar a coluna original para preservar o position
-      const originalColumn = columns.find(c => c.id === column.id);
+      // Validar dados antes de enviar
+      if (!column.name || !column.name.trim()) {
+        toast.error(t('kanban.fillAllFields') || 'Nome da coluna é obrigatório');
+        return;
+      }
       
-      // Quando editamos apenas nome e cor, não precisamos enviar position
-      // O position só é atualizado quando reordenamos as colunas
-      const updateData: { name: string; color: string } = {
-        name: column.name,
-        color: column.color,
+      if (!column.color || !column.color.trim()) {
+        toast.error(t('kanban.fillAllFields') || 'Cor da coluna é obrigatória');
+        return;
+      }
+      
+      // Quando editamos apenas nome e cor, NÃO enviamos position
+      // O position só é atualizado quando reordenamos as colunas via /reorder
+      const updateData = {
+        name: column.name.trim(),
+        color: column.color.trim(),
+        // Explicitamente NÃO incluímos position aqui
       };
-      
-      // Não enviar position ao editar - ele será preservado no banco
-      // Apenas enviamos position quando reordenamos explicitamente
       
       await api.put(`/kanban/columns/${column.id}`, updateData);
       toast.success(t('kanban.columnUpdated') || 'Coluna atualizada!');
@@ -75,6 +81,7 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
       fetchColumns();
     } catch (error: any) {
       console.error('Error updating column:', error);
+      console.error('Dados enviados:', { id: column.id, name: column.name, color: column.color });
       toast.error(error.response?.data?.error || t('kanban.errorUpdatingColumn') || 'Erro ao atualizar coluna');
     }
   };

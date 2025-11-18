@@ -187,7 +187,7 @@ export default function TeamsPage() {
       <div className="space-y-8 animate-in">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold gradient-text mb-2">{t('teams.manageTeams')}</h1>
+            <h1 className="text-4xl font-bold gradient-text mb-2">{t('teams.title')}</h1>
             <p className="text-muted-foreground">{t('teams.description')}</p>
           </div>
           <Button
@@ -288,7 +288,7 @@ export default function TeamsPage() {
               <CardContent>
                 <form onSubmit={handleCreateOrUpdateTeam} className="space-y-4">
                   <div>
-                    <label className="text-sm font-semibold">Nome da Equipe</label>
+                    <label className="text-sm font-semibold">{t('teams.teamName')}</label>
                     <Input
                       name="name"
                       defaultValue={editingTeam?.name}
@@ -297,7 +297,7 @@ export default function TeamsPage() {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-semibold">Descrição</label>
+                    <label className="text-sm font-semibold">{t('teams.teamDescription')}</label>
                     <textarea
                       name="description"
                       defaultValue={editingTeam?.description || ''}

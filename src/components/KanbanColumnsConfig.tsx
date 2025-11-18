@@ -56,6 +56,21 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
 
   const handleSaveColumn = async (column: KanbanColumn) => {
     try {
+      // Validar ID primeiro
+      if (!column.id || (typeof column.id !== 'number' && typeof column.id !== 'string')) {
+        console.error('ID inválido:', column.id, 'type:', typeof column.id);
+        toast.error('ID da coluna inválido');
+        return;
+      }
+      
+      const columnId = typeof column.id === 'number' ? column.id : parseInt(String(column.id), 10);
+      
+      if (isNaN(columnId) || columnId <= 0) {
+        console.error('ID convertido inválido:', columnId, 'de:', column.id);
+        toast.error('ID da coluna inválido');
+        return;
+      }
+      
       // Validar dados antes de enviar
       if (!column.name || !column.name.trim()) {
         toast.error(t('kanban.fillAllFields') || 'Nome da coluna é obrigatório');
@@ -75,7 +90,9 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
         // Explicitamente NÃO incluímos position aqui
       };
       
-      await api.put(`/kanban/columns/${column.id}`, updateData);
+      console.log('Atualizando coluna:', { id: columnId, name: updateData.name, color: updateData.color });
+      
+      await api.put(`/kanban/columns/${columnId}`, updateData);
       toast.success(t('kanban.columnUpdated') || 'Coluna atualizada!');
       setEditingColumn(null);
       fetchColumns();

@@ -74,7 +74,7 @@ export default function PaymentPage() {
 
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto space-y-8 animate-in">
+      <div className="max-w-[1400px] mx-auto space-y-8 animate-in px-4">
         <div>
           <h1 className="text-4xl font-bold gradient-text mb-2">{t('payment.title')}</h1>
           <p className="text-muted-foreground">{t('payment.unlockPremium')}</p>
@@ -114,9 +114,9 @@ export default function PaymentPage() {
           </CardContent>
         </Card>
         
-        <div className="grid md:grid-cols-3 gap-12">
+        <div className="grid md:grid-cols-3 gap-12 w-full">
           {/* Plano Básico */}
-          <Card className="border-border/50 bg-gradient-to-br from-card to-card/50 shadow-xl hover:shadow-2xl transition-all duration-300">
+          <Card className="border-border/50 bg-gradient-to-br from-card to-card/50 shadow-xl hover:shadow-2xl transition-all duration-300 w-full">
             <CardHeader className="pb-6">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
@@ -178,7 +178,7 @@ export default function PaymentPage() {
           </Card>
 
           {/* Plano Premium */}
-          <Card className="border-2 border-primary/50 bg-gradient-to-br from-card to-card/50 shadow-xl hover:shadow-2xl transition-all duration-300 relative">
+          <Card className="border-2 border-primary/50 bg-gradient-to-br from-card to-card/50 shadow-xl hover:shadow-2xl transition-all duration-300 relative w-full">
             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
               <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 text-yellow-900 text-xs font-bold rounded-full shadow-lg shadow-yellow-500/20">
                 ⭐ {t('payment.mostPopular')}
@@ -202,6 +202,9 @@ export default function PaymentPage() {
               </div>
               
               <div className="space-y-3">
+                <div className="pb-2 border-b border-border/50">
+                  <p className="text-xs text-muted-foreground mb-2">Tudo do Básico +</p>
+                </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                   <span><strong>{t('payment.unlimitedCredits')}</strong></span>
@@ -209,14 +212,6 @@ export default function PaymentPage() {
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                   <span><strong>{t('payment.kanbanAccess')}</strong></span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>{t('payment.dashboardAccess')}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>{t('payment.listsAccess')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
@@ -257,7 +252,7 @@ export default function PaymentPage() {
           </Card>
 
           {/* Plano Business */}
-          <Card className="border-2 border-purple-500/50 bg-gradient-to-br from-card to-card/50 shadow-xl hover:shadow-2xl transition-all duration-300 relative">
+          <Card className="border-2 border-purple-500/50 bg-gradient-to-br from-card to-card/50 shadow-xl hover:shadow-2xl transition-all duration-300 relative w-full">
             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
               <span className="px-3 py-1 bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 text-white text-xs font-bold rounded-full shadow-lg shadow-purple-500/20">
                 🏢 Business

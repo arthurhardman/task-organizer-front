@@ -100,7 +100,9 @@ export default function PaymentPage() {
     }
   }, [updateUser]);
 
-  if (user?.isPremium) {
+  // Business também é premium
+  const isPremium = user?.isPremium || user?.isBusiness;
+  if (isPremium) {
     return (
       <Layout>
         <div className="max-w-2xl mx-auto">

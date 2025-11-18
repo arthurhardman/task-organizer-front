@@ -83,8 +83,9 @@ export default function ReportsPage() {
       return;
     }
 
-    // Verificar se é premium
-    if (!user.isPremium) {
+    // Verificar se é premium (business também é premium)
+    const isPremium = user.isPremium || user.isBusiness;
+    if (!isPremium) {
       return; // Mostrar modal de bloqueio
     }
 
@@ -93,7 +94,8 @@ export default function ReportsPage() {
   }, [selectedYear, selectedMonth]);
 
   useEffect(() => {
-    if (!user || !user.isPremium) {
+    const isPremium = user?.isPremium || user?.isBusiness;
+    if (!user || !isPremium) {
       return;
     }
 
@@ -144,8 +146,9 @@ export default function ReportsPage() {
     return null;
   }
 
-  // Bloquear acesso se não for premium
-  if (!user.isPremium) {
+  // Bloquear acesso se não for premium (business também é premium)
+  const isPremium = user.isPremium || user.isBusiness;
+  if (!isPremium) {
     return (
       <Layout>
         <div className="relative">

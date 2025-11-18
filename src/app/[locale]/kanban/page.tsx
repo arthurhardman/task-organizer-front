@@ -207,8 +207,9 @@ export default function KanbanPage() {
     return null;
   }
 
-  // Bloquear acesso se não for premium
-  if (!user.isPremium) {
+  // Bloquear acesso se não for premium (business também é premium)
+  const isPremium = user.isPremium || user.isBusiness;
+  if (!isPremium) {
     return (
       <Layout>
         <div className="relative">

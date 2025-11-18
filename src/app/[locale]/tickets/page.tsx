@@ -66,8 +66,8 @@ export default function TicketsPage() {
       return;
     }
 
-    // Verificar se tem acesso business (isBusiness OU isAdmin)
-    if (!user.isBusiness && !user.isAdmin) {
+    // Verificar se tem acesso business (precisa ser business)
+    if (!user.isBusiness) {
       toast.error('É necessário ter um plano Business para acessar chamados');
       router.push('/dashboard');
       return;

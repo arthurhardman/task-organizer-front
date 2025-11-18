@@ -58,15 +58,8 @@ export default function TeamsPage() {
       return;
     }
 
-    // Apenas admin pode gerenciar equipes
-    if (!user.isAdmin) {
-      router.push('/dashboard');
-      return;
-    }
-
-    // Verificar se tem acesso business (isBusiness OU isAdmin)
-    if (!user.isBusiness && !user.isAdmin) {
-      toast.error('É necessário ter um plano Business para acessar equipes');
+    // Apenas admin com plano business pode gerenciar equipes
+    if (!user.isAdmin || !user.isBusiness) {
       router.push('/dashboard');
       return;
     }

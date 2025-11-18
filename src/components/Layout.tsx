@@ -83,14 +83,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     setShowLangMenu(false);
   };
 
+  // Garantir que business sempre seja premium
+  const isPremium = user?.isPremium || user?.isBusiness;
+  const isBusiness = user?.isBusiness || false;
+  const isAdmin = user?.isAdmin || false;
+  const hasBusinessAccess = isBusiness && isAdmin; // Precisa ser business E admin para acessar equipes/usuários
+
   const navItems = [
     { href: '/dashboard', icon: LayoutDashboard, label: t('navigation.dashboard') },
     { href: '/kanban', icon: Columns, label: t('navigation.kanban') },
     { href: '/lists', icon: List, label: t('navigation.lists') },
-    ...(user?.isPremium ? [{ href: '/reports', icon: BarChart3, label: t('navigation.reports') }] : []),
-    ...((user?.isBusiness || user?.isAdmin) ? [{ href: '/teams', icon: Users, label: t('navigation.teams') }] : []),
-    ...((user?.isBusiness || user?.isAdmin) ? [{ href: '/tickets', icon: Ticket, label: t('navigation.tickets') }] : []),
-    ...(user?.isAdmin ? [{ href: '/business-users', icon: Users, label: t('navigation.businessUsers') }] : []),
+    ...(isPremium ? [{ href: '/reports', icon: BarChart3, label: t('navigation.reports') }] : []),
+    ...(hasBusinessAccess ? [{ href: '/teams', icon: Users, label: t('navigation.teams') }] : []),
+    ...(hasBusinessAccess ? [{ href: '/tickets', icon: Ticket, label: t('navigation.tickets') }] : []),
+    ...(isAdmin ? [{ href: '/business-users', icon: Users, label: t('navigation.businessUsers') }] : []),
     { href: '/settings', icon: Settings, label: t('navigation.settings') },
   ];
 

@@ -21,6 +21,8 @@ interface BusinessUser {
   is_business: boolean;
   team_count: number;
   created_at: string;
+  business_id?: number | null;
+  business_name?: string | null;
 }
 
 interface BusinessInvitation {
@@ -31,17 +33,19 @@ interface BusinessInvitation {
 }
 
 interface BusinessInfo {
-  id: number;
+  id: number | null;
   name: string;
   domain: string;
-  max_users: number;
-  extra_users_count: number;
+  max_users: number | null;
+  extra_users_count: number | null;
   currentUserCount: number;
-  totalAllowed: number;
+  totalAllowed: number | null;
   usersOverLimit: number;
   extraUsersNeeded: number;
   extraUsersCost: number;
   canAddMore: boolean;
+  isSystemAdmin?: boolean;
+  totalBusinesses?: number;
 }
 
 export default function BusinessUsersPage() {
@@ -75,9 +79,12 @@ export default function BusinessUsersPage() {
 
     fetchBusinessInfo();
     fetchUsers();
-    fetchInvitations();
+    // Buscar convites apenas se for business (não admin do sistema)
+    if (user.isBusiness) {
+      fetchInvitations();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, user?.isAdmin]);
+  }, [user?.id, user?.isAdmin, user?.isBusiness]);
 
   const fetchBusinessInfo = async () => {
     try {
@@ -102,12 +109,20 @@ export default function BusinessUsersPage() {
   };
 
   const fetchInvitations = async () => {
+    // Só buscar convites se for business (não admin do sistema)
+    if (!user?.isBusiness) {
+      setInvitations([]);
+      return;
+    }
     try {
       const response = await api.get('/business/users/invitations');
       setInvitations(response.data);
     } catch (error) {
       console.error('Error fetching invitations:', error);
-      toast.error('Erro ao carregar convites');
+      // Não mostrar erro se for admin do sistema
+      if (user?.isBusiness) {
+        toast.error('Erro ao carregar convites');
+      }
     }
   };
 
@@ -197,8 +212,14 @@ export default function BusinessUsersPage() {
     <Layout>
       <div className="space-y-8 animate-in">
         <div>
-          <h1 className="text-4xl font-bold gradient-text mb-2">Gerenciar Usuários</h1>
-          <p className="text-muted-foreground">Gerencie os usuários da sua empresa</p>
+          <h1 className="text-4xl font-bold gradient-text mb-2">
+            {businessInfo?.isSystemAdmin ? 'Gerenciar Usuários do Sistema' : 'Gerenciar Usuários'}
+          </h1>
+          <p className="text-muted-foreground">
+            {businessInfo?.isSystemAdmin 
+              ? 'Visualize todos os usuários do sistema' 
+              : 'Gerencie os usuários da sua empresa'}
+          </p>
         </div>
 
         {loading ? (
@@ -213,78 +234,95 @@ export default function BusinessUsersPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Users className="w-5 h-5 text-primary" />
-                    Informações da Empresa
+                    {businessInfo.isSystemAdmin ? 'Informações do Sistema' : 'Informações da Empresa'}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Usuários Atuais</p>
-                      <p className="text-2xl font-bold">{businessInfo.currentUserCount}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Limite Base</p>
-                      <p className="text-2xl font-bold">{businessInfo.max_users}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Total Permitido</p>
-                      <p className="text-2xl font-bold">{businessInfo.totalAllowed}</p>
-                    </div>
-                  </div>
-
-                  {businessInfo.usersOverLimit > 0 && (
-                    <div className="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-                      <div className="flex items-center gap-2 mb-2">
-                        <AlertCircle className="w-5 h-5 text-yellow-500" />
-                        <p className="font-semibold text-yellow-500">
-                          {businessInfo.usersOverLimit} usuário(s) acima do limite base
-                        </p>
+                  {businessInfo.isSystemAdmin ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Total de Usuários</p>
+                        <p className="text-2xl font-bold">{businessInfo.currentUserCount}</p>
                       </div>
-                      {businessInfo.extraUsersNeeded > 0 && (
-                        <p className="text-sm text-muted-foreground">
-                          É necessário adicionar {businessInfo.extraUsersNeeded} usuário(s) extra.
-                          Custo: R$ {businessInfo.extraUsersCost.toFixed(2)}
-                        </p>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Total de Empresas</p>
+                        <p className="text-2xl font-bold">{businessInfo.totalBusinesses || 0}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Usuários Atuais</p>
+                        <p className="text-2xl font-bold">{businessInfo.currentUserCount}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Limite Base</p>
+                        <p className="text-2xl font-bold">{businessInfo.max_users}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Total Permitido</p>
+                        <p className="text-2xl font-bold">{businessInfo.totalAllowed}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {!businessInfo.isSystemAdmin && (
+                    <>
+                      {businessInfo.usersOverLimit > 0 && (
+                        <div className="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                          <div className="flex items-center gap-2 mb-2">
+                            <AlertCircle className="w-5 h-5 text-yellow-500" />
+                            <p className="font-semibold text-yellow-500">
+                              {businessInfo.usersOverLimit} usuário(s) acima do limite base
+                            </p>
+                          </div>
+                          {businessInfo.extraUsersNeeded > 0 && (
+                            <p className="text-sm text-muted-foreground">
+                              É necessário adicionar {businessInfo.extraUsersNeeded} usuário(s) extra.
+                              Custo: R$ {businessInfo.extraUsersCost.toFixed(2)}
+                            </p>
+                          )}
+                        </div>
                       )}
-                    </div>
-                  )}
 
-                  {!businessInfo.canAddMore && (
-                    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-                      <div className="flex items-center gap-2 mb-2">
-                        <X className="w-5 h-5 text-red-500" />
-                        <p className="font-semibold text-red-500">
-                          Limite de usuários atingido
-                        </p>
+                      {!businessInfo.canAddMore && (
+                        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+                          <div className="flex items-center gap-2 mb-2">
+                            <X className="w-5 h-5 text-red-500" />
+                            <p className="font-semibold text-red-500">
+                              Limite de usuários atingido
+                            </p>
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            Adicione mais usuários extras para permitir novos registros.
+                          </p>
+                        </div>
+                      )}
+
+                      <div className="flex gap-3">
+                        <Button
+                          onClick={() => setShowInviteModal(true)}
+                          className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white"
+                        >
+                          <UserPlus className="w-4 h-4 mr-2" />
+                          Convidar Usuário
+                        </Button>
+                        <Button
+                          onClick={() => setShowAddExtraModal(true)}
+                          variant="outline"
+                          className="border-primary text-primary hover:bg-primary/10"
+                        >
+                          Adicionar Usuários Extras
+                        </Button>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Adicione mais usuários extras para permitir novos registros.
-                      </p>
-                    </div>
+                    </>
                   )}
-
-                  <div className="flex gap-3">
-                    <Button
-                      onClick={() => setShowInviteModal(true)}
-                      className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white"
-                    >
-                      <UserPlus className="w-4 h-4 mr-2" />
-                      Convidar Usuário
-                    </Button>
-                    <Button
-                      onClick={() => setShowAddExtraModal(true)}
-                      variant="outline"
-                      className="border-primary text-primary hover:bg-primary/10"
-                    >
-                      Adicionar Usuários Extras
-                    </Button>
-                  </div>
                 </CardContent>
               </Card>
             )}
 
-            {/* Lista de Convites Pendentes */}
-            {invitations.length > 0 && (
+            {/* Lista de Convites Pendentes - apenas para business */}
+            {!businessInfo?.isSystemAdmin && invitations.length > 0 && (
               <Card className="border-border/50 bg-gradient-to-br from-card to-card/50">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -333,7 +371,9 @@ export default function BusinessUsersPage() {
             {/* Lista de Usuários */}
             <Card className="border-border/50 bg-gradient-to-br from-card to-card/50">
               <CardHeader>
-                <CardTitle>Usuários da Empresa</CardTitle>
+                <CardTitle>
+                  {businessInfo?.isSystemAdmin ? 'Todos os Usuários do Sistema' : 'Usuários da Empresa'}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
@@ -358,28 +398,41 @@ export default function BusinessUsersPage() {
                         </div>
                         <p className="text-sm text-muted-foreground">{businessUser.email}</p>
                         <p className="text-xs text-muted-foreground mt-1">
+                          {businessInfo?.isSystemAdmin && businessUser.business_name && (
+                            <span className="mr-2">Empresa: {businessUser.business_name}</span>
+                          )}
                           {businessUser.team_count} equipe(s) • Registrado em{' '}
                           {new Date(businessUser.created_at).toLocaleDateString('pt-BR')}
                         </p>
                       </div>
-                      {businessUser.id !== user.id && !businessUser.is_admin && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            setUserToDelete(businessUser.id);
-                            setShowDeleteModal(true);
-                          }}
-                          className="text-destructive"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                      {businessInfo?.isSystemAdmin ? (
+                        // Admin do sistema não pode remover usuários
+                        <span className="text-xs text-muted-foreground">Admin do Sistema</span>
+                      ) : (
+                        businessUser.id !== user.id && !businessUser.is_admin && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setUserToDelete(businessUser.id);
+                              setShowDeleteModal(true);
+                            }}
+                            className="text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )
                       )}
                     </div>
                   ))}
-                  {users.length === 0 && invitations.length === 0 && (
+                  {users.length === 0 && (!businessInfo?.isSystemAdmin && invitations.length === 0) && (
                     <p className="text-center text-muted-foreground py-8">
                       Nenhum usuário encontrado. Convide usuários para começar!
+                    </p>
+                  )}
+                  {users.length === 0 && businessInfo?.isSystemAdmin && (
+                    <p className="text-center text-muted-foreground py-8">
+                      Nenhum usuário encontrado no sistema.
                     </p>
                   )}
                 </div>

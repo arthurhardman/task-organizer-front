@@ -58,7 +58,15 @@ export default function TeamsPage() {
       return;
     }
 
+    // Apenas admin pode gerenciar equipes
     if (!user.isAdmin) {
+      router.push('/dashboard');
+      return;
+    }
+
+    // Verificar se tem acesso business (isBusiness OU isAdmin)
+    if (!user.isBusiness && !user.isAdmin) {
+      toast.error('É necessário ter um plano Business para acessar equipes');
       router.push('/dashboard');
       return;
     }
@@ -66,7 +74,7 @@ export default function TeamsPage() {
     fetchTeams();
     fetchUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, user?.isAdmin]);
+  }, [user?.id, user?.isAdmin, user?.isBusiness]);
 
   const fetchTeams = async () => {
     try {

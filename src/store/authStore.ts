@@ -9,6 +9,7 @@ interface User {
   language: string;
   credits?: number;
   isAdmin?: boolean;
+  isBusiness?: boolean;
   businessId?: number | null;
 }
 

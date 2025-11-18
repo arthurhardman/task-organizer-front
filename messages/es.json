@@ -154,7 +154,8 @@
     "settings": "Configuración",
     "reports": "Informes",
     "teams": "Equipos",
-    "tickets": "Tickets"
+    "tickets": "Tickets",
+    "businessUsers": "Usuarios"
   },
   "reports": {
     "title": "Informe Mensual",

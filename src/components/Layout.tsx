@@ -44,20 +44,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       }
     };
     
-    // Buscar créditos atualizados
-    const fetchCredits = async () => {
+    // Buscar dados atualizados do usuário
+    const fetchUserData = async () => {
       try {
         const response = await api.get('/auth/me');
-        if (response.data.credits !== undefined) {
-          updateUser({ credits: response.data.credits });
+        if (response.data) {
+          updateUser({ 
+            credits: response.data.credits,
+            isAdmin: response.data.isAdmin,
+            isBusiness: response.data.isBusiness,
+            businessId: response.data.businessId,
+          });
         }
       } catch (error) {
-        console.error('Error fetching credits:', error);
+        console.error('Error fetching user data:', error);
       }
     };
     
     checkPremiumStatus();
-    fetchCredits();
+    fetchUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]); // Só executa quando o ID do usuário muda (login/logout)
 
@@ -83,8 +88,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { href: '/kanban', icon: Columns, label: t('navigation.kanban') },
     { href: '/lists', icon: List, label: t('navigation.lists') },
     ...(user?.isPremium ? [{ href: '/reports', icon: BarChart3, label: t('navigation.reports') }] : []),
-    ...(user?.isAdmin ? [{ href: '/teams', icon: Users, label: t('navigation.teams') }] : []),
-    { href: '/tickets', icon: Ticket, label: t('navigation.tickets') },
+    ...((user?.isBusiness || user?.isAdmin) ? [{ href: '/teams', icon: Users, label: t('navigation.teams') }] : []),
+    ...((user?.isBusiness || user?.isAdmin) ? [{ href: '/tickets', icon: Ticket, label: t('navigation.tickets') }] : []),
+    ...(user?.isAdmin ? [{ href: '/business-users', icon: Users, label: t('navigation.businessUsers') }] : []),
     { href: '/settings', icon: Settings, label: t('navigation.settings') },
   ];
 

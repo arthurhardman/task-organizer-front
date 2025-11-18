@@ -154,7 +154,8 @@
     "settings": "Settings",
     "reports": "Reports",
     "teams": "Teams",
-    "tickets": "Tickets"
+    "tickets": "Tickets",
+    "businessUsers": "Users"
   },
   "reports": {
     "title": "Monthly Report",

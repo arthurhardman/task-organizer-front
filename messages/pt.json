@@ -154,7 +154,8 @@
     "settings": "Configurações",
     "reports": "Relatórios",
     "teams": "Equipes",
-    "tickets": "Chamados"
+    "tickets": "Chamados",
+    "businessUsers": "Usuários"
   },
   "reports": {
     "title": "Relatório Mensal",

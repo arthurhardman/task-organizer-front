@@ -66,10 +66,17 @@ export default function TicketsPage() {
       return;
     }
 
+    // Verificar se tem acesso business (isBusiness OU isAdmin)
+    if (!user.isBusiness && !user.isAdmin) {
+      toast.error('É necessário ter um plano Business para acessar chamados');
+      router.push('/dashboard');
+      return;
+    }
+
     fetchTickets();
     fetchTeams();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id]);
+  }, [user?.id, user?.isBusiness, user?.isAdmin]);
 
   const fetchTickets = async () => {
     try {

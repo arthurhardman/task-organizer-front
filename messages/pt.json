@@ -198,23 +198,6 @@
     "business": "Business",
     "systemAdmin": "Admin do Sistema"
   },
-  "teams": {
-    "manageTeams": "Gerenciar Equipes",
-    "description": "Crie e gerencie equipes da sua empresa",
-    "newTeam": "Nova Equipe",
-    "editTeam": "Editar Equipe",
-    "teamMembers": "Membros da Equipe",
-    "addMember": "Adicionar Membro",
-    "member": "Membro",
-    "leader": "Líder",
-    "remove": "Remover",
-    "members": "membro(s)",
-    "noMembers": "Nenhum membro nesta equipe",
-    "deleteTeam": "Confirmar Exclusão",
-    "deleteTeamDescription": "Tem certeza que deseja excluir esta equipe? Todos os membros serão removidos.",
-    "delete": "Excluir",
-    "cancel": "Cancelar"
-  },
   "reports": {
     "title": "Relatório Mensal",
     "description": "Análise detalhada das suas tarefas do mês",

@@ -139,19 +139,42 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
     
     try {
       // Garantir que todos os valores são números válidos
-      const columnsToUpdate = newColumns.map((col, index) => {
-        const id = typeof col.id === 'number' && !isNaN(col.id) ? col.id : parseInt(String(col.id), 10);
-        const position = typeof index === 'number' && !isNaN(index) ? index : parseInt(String(index), 10);
+      const columnsToUpdate: Array<{ id: number; position: number }> = [];
+      
+      for (let index = 0; index < newColumns.length; index++) {
+        const col = newColumns[index];
         
-        if (isNaN(id) || isNaN(position)) {
-          throw new Error(`Valores inválidos para reordenação: id=${col.id}, position=${index}`);
+        // Validar que id existe e é válido
+        if (col.id === undefined || col.id === null) {
+          console.error('Coluna sem ID:', col);
+          throw new Error(`Coluna sem ID na posição ${index}`);
         }
         
-        return {
-          id,
-          position,
-        };
-      });
+        // Converter id para número
+        const id = typeof col.id === 'number' 
+          ? col.id 
+          : typeof col.id === 'string' 
+            ? parseInt(col.id, 10)
+            : Number(col.id);
+        
+        // Validar id
+        if (isNaN(id) || id <= 0) {
+          console.error('ID inválido:', col.id, 'convertido para:', id);
+          throw new Error(`ID inválido: ${col.id} (convertido para ${id})`);
+        }
+        
+        // Position é o índice
+        const position = index;
+        
+        if (isNaN(position) || position < 0) {
+          console.error('Position inválido:', position);
+          throw new Error(`Position inválido: ${position}`);
+        }
+        
+        columnsToUpdate.push({ id, position });
+      }
+      
+      console.log('Enviando colunas para reordenação:', columnsToUpdate);
       
       await api.put('/kanban/columns/reorder', {
         columns: columnsToUpdate,
@@ -160,6 +183,7 @@ export function KanbanColumnsConfig({ isOpen, onClose, onColumnsUpdated }: Kanba
       onColumnsUpdated();
     } catch (error: any) {
       console.error('Error reordering columns:', error);
+      console.error('Dados que causaram o erro:', newColumns);
       toast.error(error.response?.data?.error || t('kanban.errorReordering') || 'Erro ao reordenar colunas');
       fetchColumns(); // Reverter em caso de erro
     }

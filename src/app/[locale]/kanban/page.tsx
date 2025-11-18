@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
-import { Plus, Trash2, Edit, Lock, Sparkles, Settings } from 'lucide-react';
+import { Plus, Trash2, Edit, Lock, Sparkles, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { toast } from '@/components/ui/toast';
 import { PlansModal } from '@/components/PlansModal';
@@ -49,6 +49,7 @@ export default function KanbanPage() {
   const [columns, setColumns] = useState<KanbanColumn[]>([]);
   const [loadingColumns, setLoadingColumns] = useState(true);
   const [showColumnsConfig, setShowColumnsConfig] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!user) {
@@ -244,24 +245,35 @@ export default function KanbanPage() {
                   </CardContent>
                 </Card>
               ) : (
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {columns.map((column) => (
-                    <Card key={column.id} className="border-border/50 bg-gradient-to-br from-card to-card/50 min-h-[500px]">
-                      <CardHeader className="pb-4">
-                        <CardTitle className="flex items-center gap-2 text-lg">
-                          <div className="p-2 rounded-lg" style={{ backgroundColor: `${column.color}20` }}>
-                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: column.color }}></div>
-                          </div>
-                          {column.name}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-center py-8 text-muted-foreground">
-                          {t('tasks.noTasks')}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                <div className="relative">
+                  {/* Container do carrossel */}
+                  <div
+                    className="flex gap-6 overflow-x-auto overflow-y-hidden scrollbar-hide pb-4 scroll-smooth"
+                    style={{
+                      scrollbarWidth: 'none',
+                      msOverflowStyle: 'none',
+                    }}
+                  >
+                    {columns.map((column) => (
+                      <div key={column.id} className="flex-shrink-0 w-80">
+                        <Card className="border-border/50 bg-gradient-to-br from-card to-card/50 min-h-[500px]">
+                          <CardHeader className="pb-4">
+                            <CardTitle className="flex items-center gap-2 text-lg">
+                              <div className="p-2 rounded-lg" style={{ backgroundColor: `${column.color}20` }}>
+                                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: column.color }}></div>
+                              </div>
+                              {column.name}
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="text-center py-8 text-muted-foreground">
+                              {t('tasks.noTasks')}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -478,11 +490,51 @@ export default function KanbanPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {columns.map((column, colIndex) => {
+          <div className="relative group">
+            {/* Botões de navegação */}
+            {columns.length > 3 && (
+              <>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 backdrop-blur-sm shadow-lg hover:bg-background border-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => {
+                    if (scrollContainerRef.current) {
+                      const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
+                      scrollContainerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 backdrop-blur-sm shadow-lg hover:bg-background border-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => {
+                    if (scrollContainerRef.current) {
+                      const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
+                      scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </Button>
+              </>
+            )}
+            {/* Container do carrossel */}
+            <div
+              ref={scrollContainerRef}
+              className="flex gap-6 overflow-x-auto overflow-y-hidden scrollbar-hide pb-4 scroll-smooth"
+              style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              }}
+            >
+              {columns.map((column, colIndex) => {
               const columnTasks = getTasksByStatus(column.status_id);
               return (
-                <div key={column.id} className="space-y-4">
+                <div key={column.id} className="flex-shrink-0 w-80 space-y-4">
                   <Card className="border-border/50 bg-gradient-to-br from-card to-card/50">
                     <CardHeader className="pb-4">
                       <CardTitle className="flex items-center gap-2 text-lg">
@@ -568,6 +620,7 @@ export default function KanbanPage() {
               </div>
             );
           })}
+            </div>
           </div>
         )}
       </div>

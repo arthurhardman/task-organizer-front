@@ -80,6 +80,15 @@
   .card-hover {
     @apply transition-all duration-300 hover:shadow-xl hover:scale-[1.02];
   }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes fadeIn {

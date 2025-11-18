@@ -16,7 +16,8 @@
     "error": "Error",
     "success": "Éxito",
     "credits": "créditos",
-    "premium": "Premium"
+    "premium": "Premium",
+    "business": "Business"
   },
   "auth": {
     "loginTitle": "Inicia sesión en tu cuenta",
@@ -133,6 +134,7 @@
     "mostPopular": "MÁS POPULAR",
     "premiumActivated": "¡Tu suscripción Premium ha sido activada. Disfruta de todos los recursos!",
     "premiumActive": "Premium Activo",
+    "businessActive": "Business Activo",
     "freePlan": "Plan Gratuito",
     "expiresIn": "Expira en:",
     "expired": "Expirada",

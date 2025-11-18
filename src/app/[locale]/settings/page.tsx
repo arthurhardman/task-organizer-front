@@ -124,7 +124,13 @@ export default function SettingsPage() {
               <div className="p-4 rounded-lg bg-muted/30">
                 <p className="text-sm text-muted-foreground mb-2">{t('settings.status')}</p>
                 <p className="font-semibold text-lg">
-                  {subscriptionStatus?.isPremium ? (
+                  {user?.isBusiness ? (
+                    <span className="flex items-center gap-2">
+                      <span className="px-3 py-1 bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 text-white text-sm font-bold rounded-full">
+                        🏢 {t('payment.businessActive')}
+                      </span>
+                    </span>
+                  ) : subscriptionStatus?.isPremium ? (
                     <span className="flex items-center gap-2">
                       <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-yellow-900 text-sm font-bold rounded-full">
                         ⭐ {t('payment.premiumActive')}

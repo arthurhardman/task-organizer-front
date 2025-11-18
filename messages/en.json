@@ -16,7 +16,8 @@
     "error": "Error",
     "success": "Success",
     "credits": "credits",
-    "premium": "Premium"
+    "premium": "Premium",
+    "business": "Business"
   },
   "auth": {
     "loginTitle": "Login to your account",
@@ -133,6 +134,7 @@
     "mostPopular": "MOST POPULAR",
     "premiumActivated": "Your Premium subscription has been activated. Enjoy all resources!",
     "premiumActive": "Premium Active",
+    "businessActive": "Business Active",
     "freePlan": "Free Plan",
     "expiresIn": "Expires in:",
     "expired": "Expired",

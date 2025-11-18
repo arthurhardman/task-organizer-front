@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/routing';
-import { CheckCircle2, Coins, Sparkles, ExternalLink, AlertCircle, Mail } from 'lucide-react';
+import { CheckCircle2, Coins, Sparkles, ExternalLink, AlertCircle, Mail, Building2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '@/store/authStore';
 
@@ -15,11 +15,13 @@ interface PlansModalProps {
 
 const BASIC_PLAN_PRICE = 24.90;
 const PREMIUM_PLAN_PRICE = 39.90;
+const BUSINESS_PLAN_PRICE = 99.90;
 const BASIC_PLAN_CREDITS = 50;
 
 // URLs dos checkouts do GGCheckout
 const BASIC_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/RNCPqNAHkEGRn21iIW2s'; // Plano Básico
 const PREMIUM_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/udNaQ9Xhb037aDqoYMvm'; // Plano Premium
+const BUSINESS_CHECKOUT_URL = 'https://www.ggcheckout.com/checkout/v2/aAcrF4goLLHYSUKTy7qT'; // Plano Business
 
 export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps) {
   const t = useTranslations();
@@ -92,7 +94,7 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
             </Card>
           )}
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {/* Plano Básico */}
             <Card className="border-border/50 bg-gradient-to-br from-card to-card/50 hover:shadow-xl transition-all duration-300">
               <CardHeader>
@@ -209,6 +211,79 @@ export function PlansModal({ isOpen, onClose, currentCredits }: PlansModalProps)
                   <span className="flex items-center gap-2">
                     <ExternalLink className="w-4 h-4" />
                     {t('payment.signPremiumPlan')}
+                  </span>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Plano Business */}
+            <Card className="border-2 border-purple-500/50 bg-gradient-to-br from-card to-card/50 hover:shadow-xl transition-all duration-300 relative">
+              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <span className="px-3 py-1 bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 text-white text-xs font-bold rounded-full shadow-lg shadow-purple-500/20">
+                  🏢 Business
+                </span>
+              </div>
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                    <Building2 className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl">Plano Business</CardTitle>
+                    <CardDescription>Para empresas</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="text-center">
+                  <div className="text-4xl font-bold gradient-text mb-2">
+                    R$ {BUSINESS_PLAN_PRICE.toFixed(2).replace('.', ',')}
+                  </div>
+                  <p className="text-muted-foreground text-sm">{t('payment.perMonth')}</p>
+                </div>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span><strong>{t('payment.unlimitedCredits')}</strong></span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span>{t('payment.dashboardAccess')}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span>{t('payment.listsAccess')}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span>{t('payment.kanbanAccess')}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span>{t('payment.advancedReports')}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span><strong>Chamados e Equipes</strong></span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span><strong>Até 20 usuários</strong></span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span><strong>Gerenciamento de usuários</strong></span>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={() => handlePlanClick(BUSINESS_CHECKOUT_URL)}
+                  className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white shadow-lg shadow-purple-500/20"
+                >
+                  <span className="flex items-center gap-2">
+                    <ExternalLink className="w-4 h-4" />
+                    Assinar Plano Business
                   </span>
                 </Button>
               </CardContent>

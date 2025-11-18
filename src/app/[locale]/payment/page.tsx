@@ -114,7 +114,7 @@ export default function PaymentPage() {
           </CardContent>
         </Card>
         
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-3 gap-8">
           {/* Plano Básico */}
           <Card className="border-border/50 bg-gradient-to-br from-card to-card/50 shadow-xl hover:shadow-2xl transition-all duration-300 min-w-[320px]">
             <CardHeader className="pb-6">

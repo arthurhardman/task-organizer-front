@@ -8,6 +8,8 @@ interface User {
   isPremium: boolean;
   language: string;
   credits?: number;
+  isAdmin?: boolean;
+  businessId?: number | null;
 }
 
 interface AuthState {

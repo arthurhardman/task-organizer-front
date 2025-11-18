@@ -152,7 +152,9 @@
     "kanban": "Kanban",
     "lists": "Listas",
     "settings": "Configuración",
-    "reports": "Informes"
+    "reports": "Informes",
+    "teams": "Equipos",
+    "tickets": "Tickets"
   },
   "reports": {
     "title": "Informe Mensual",
@@ -184,6 +186,53 @@
     "account": "Cuenta",
     "active": "Activo",
     "expires": "Expira"
+  },
+  "teams": {
+    "title": "Gestionar Equipos",
+    "description": "Crea y gestiona los equipos de tu empresa",
+    "newTeam": "Nuevo Equipo",
+    "editTeam": "Editar Equipo",
+    "teamName": "Nombre del Equipo",
+    "teamDescription": "Descripción",
+    "members": "miembro(s)",
+    "addMember": "Agregar Miembro",
+    "removeMember": "Remover",
+    "noMembers": "No hay miembros en este equipo",
+    "selectUser": "Selecciona un usuario",
+    "role": "Función",
+    "member": "Miembro",
+    "leader": "Líder",
+    "confirmDeleteTeam": "Confirmar Eliminación",
+    "confirmDeleteTeamDescription": "¿Estás seguro de que deseas eliminar este equipo? Todos los miembros serán removidos.",
+    "teamCreated": "¡Equipo creado!",
+    "teamUpdated": "¡Equipo actualizado!",
+    "teamDeleted": "¡Equipo eliminado!",
+    "memberAdded": "¡Miembro agregado al equipo!",
+    "memberRemoved": "¡Miembro removido del equipo!"
+  },
+  "tickets": {
+    "title": "Tickets",
+    "description": "Crea y gestiona tickets para tu equipo",
+    "newTicket": "Nuevo Ticket",
+    "ticketTitle": "Título del Ticket",
+    "ticketDescription": "Descripción",
+    "assignTeam": "Asignar Equipo",
+    "selectTeam": "Selecciona un equipo",
+    "priority": "Prioridad",
+    "status": "Estado",
+    "open": "Abierto",
+    "inProgress": "En Progreso",
+    "resolved": "Resuelto",
+    "closed": "Cerrado",
+    "createdBy": "Creado por",
+    "assignedTo": "Asignado a",
+    "assignResponsible": "Asignar Responsable",
+    "selectResponsible": "Selecciona un responsable",
+    "noTickets": "No se encontraron tickets",
+    "ticketCreated": "¡Ticket creado!",
+    "ticketUpdated": "¡Ticket actualizado!",
+    "ticketDeleted": "¡Ticket eliminado!",
+    "taskCreated": "Tarea creada automáticamente para el equipo"
   }
 }
 

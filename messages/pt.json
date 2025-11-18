@@ -152,7 +152,9 @@
     "kanban": "Kanban",
     "lists": "Listas",
     "settings": "Configurações",
-    "reports": "Relatórios"
+    "reports": "Relatórios",
+    "teams": "Equipes",
+    "tickets": "Chamados"
   },
   "reports": {
     "title": "Relatório Mensal",
@@ -184,6 +186,53 @@
     "account": "Conta",
     "active": "Ativo",
     "expires": "Expira"
+  },
+  "teams": {
+    "title": "Gerenciar Equipes",
+    "description": "Crie e gerencie equipes da sua empresa",
+    "newTeam": "Nova Equipe",
+    "editTeam": "Editar Equipe",
+    "teamName": "Nome da Equipe",
+    "teamDescription": "Descrição",
+    "members": "membro(s)",
+    "addMember": "Adicionar Membro",
+    "removeMember": "Remover",
+    "noMembers": "Nenhum membro nesta equipe",
+    "selectUser": "Selecione um usuário",
+    "role": "Função",
+    "member": "Membro",
+    "leader": "Líder",
+    "confirmDeleteTeam": "Confirmar Exclusão",
+    "confirmDeleteTeamDescription": "Tem certeza que deseja excluir esta equipe? Todos os membros serão removidos.",
+    "teamCreated": "Equipe criada!",
+    "teamUpdated": "Equipe atualizada!",
+    "teamDeleted": "Equipe excluída!",
+    "memberAdded": "Membro adicionado à equipe!",
+    "memberRemoved": "Membro removido da equipe!"
+  },
+  "tickets": {
+    "title": "Chamados",
+    "description": "Crie e gerencie chamados para sua equipe",
+    "newTicket": "Novo Chamado",
+    "ticketTitle": "Título do Chamado",
+    "ticketDescription": "Descrição",
+    "assignTeam": "Atribuir Equipe",
+    "selectTeam": "Selecione uma equipe",
+    "priority": "Prioridade",
+    "status": "Status",
+    "open": "Aberto",
+    "inProgress": "Em Progresso",
+    "resolved": "Resolvido",
+    "closed": "Fechado",
+    "createdBy": "Criado por",
+    "assignedTo": "Atribuído para",
+    "assignResponsible": "Atribuir Responsável",
+    "selectResponsible": "Selecione um responsável",
+    "noTickets": "Nenhum chamado encontrado",
+    "ticketCreated": "Chamado criado!",
+    "ticketUpdated": "Chamado atualizado!",
+    "ticketDeleted": "Chamado excluído!",
+    "taskCreated": "Tarefa criada automaticamente para a equipe"
   }
 }
 

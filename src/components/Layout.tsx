@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter, usePathname, Link } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, Columns, List, Settings, LogOut, Globe, Coins, BarChart3, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Columns, List, Settings, LogOut, Globe, Coins, BarChart3, Menu, X, Users, Ticket } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import api from '@/lib/api';
 
@@ -83,6 +83,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { href: '/kanban', icon: Columns, label: t('navigation.kanban') },
     { href: '/lists', icon: List, label: t('navigation.lists') },
     ...(user?.isPremium ? [{ href: '/reports', icon: BarChart3, label: t('navigation.reports') }] : []),
+    ...(user?.isAdmin ? [{ href: '/teams', icon: Users, label: t('navigation.teams') }] : []),
+    { href: '/tickets', icon: Ticket, label: t('navigation.tickets') },
     { href: '/settings', icon: Settings, label: t('navigation.settings') },
   ];
 

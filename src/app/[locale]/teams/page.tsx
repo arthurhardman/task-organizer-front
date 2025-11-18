@@ -187,8 +187,8 @@ export default function TeamsPage() {
       <div className="space-y-8 animate-in">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold gradient-text mb-2">Gerenciar Equipes</h1>
-            <p className="text-muted-foreground">Crie e gerencie equipes da sua empresa</p>
+            <h1 className="text-4xl font-bold gradient-text mb-2">{t('teams.manageTeams')}</h1>
+            <p className="text-muted-foreground">{t('teams.description')}</p>
           </div>
           <Button
             onClick={() => {
@@ -198,7 +198,7 @@ export default function TeamsPage() {
             className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Nova Equipe
+            {t('teams.newTeam')}
           </Button>
         </div>
 
@@ -257,7 +257,7 @@ export default function TeamsPage() {
                   )}
                   <div className="flex items-center gap-2 text-sm">
                     <Users className="w-4 h-4" />
-                    <span>{team.member_count} membro(s)</span>
+                    <span>{team.member_count} {t('teams.members')}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -271,7 +271,7 @@ export default function TeamsPage() {
             <Card className="bg-card/95 backdrop-blur-xl border-border/50 shadow-2xl max-w-md w-full m-4 animate-slide-up">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>{editingTeam ? 'Editar Equipe' : 'Nova Equipe'}</CardTitle>
+                  <CardTitle>{editingTeam ? t('teams.editTeam') : t('teams.newTeam')}</CardTitle>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -319,7 +319,7 @@ export default function TeamsPage() {
                       }}
                       className="flex-1"
                     >
-                      Cancelar
+                      {t('teams.cancel')}
                     </Button>
                   </div>
                 </form>
@@ -335,7 +335,7 @@ export default function TeamsPage() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>
-                    Membros da Equipe: {teams.find(t => t.id === selectedTeam)?.name}
+                    {t('teams.teamMembers')}: {teams.find(t => t.id === selectedTeam)?.name}
                   </CardTitle>
                   <div className="flex gap-2">
                     <Button
@@ -344,7 +344,7 @@ export default function TeamsPage() {
                       onClick={() => setShowAddMemberModal(true)}
                     >
                       <UserPlus className="w-4 h-4 mr-2" />
-                      Adicionar Membro
+                      {t('teams.addMember')}
                     </Button>
                     <Button
                       variant="ghost"
@@ -371,7 +371,7 @@ export default function TeamsPage() {
                         <p className="font-semibold">{member.name}</p>
                         <p className="text-sm text-muted-foreground">{member.email}</p>
                         <span className="text-xs text-muted-foreground">
-                          {member.role === 'leader' ? 'Líder' : 'Membro'}
+                          {member.role === 'leader' ? t('teams.leader') : t('teams.member')}
                         </span>
                       </div>
                       <Button
@@ -380,13 +380,13 @@ export default function TeamsPage() {
                         onClick={() => handleRemoveMember(member.user_id)}
                         className="text-destructive"
                       >
-                        Remover
+                        {t('teams.remove')}
                       </Button>
                     </div>
                   ))}
                   {teamMembers.length === 0 && (
                     <p className="text-center text-muted-foreground py-8">
-                      Nenhum membro nesta equipe
+                      {t('teams.noMembers')}
                     </p>
                   )}
                 </div>
@@ -401,7 +401,7 @@ export default function TeamsPage() {
             <Card className="bg-card/95 backdrop-blur-xl border-border/50 shadow-2xl max-w-md w-full m-4 animate-slide-up">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>Adicionar Membro</CardTitle>
+                  <CardTitle>{t('teams.addMember')}</CardTitle>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -452,7 +452,7 @@ export default function TeamsPage() {
                       onClick={() => setShowAddMemberModal(false)}
                       className="flex-1"
                     >
-                      Cancelar
+                      {t('teams.cancel')}
                     </Button>
                   </div>
                 </form>
@@ -468,10 +468,10 @@ export default function TeamsPage() {
             setTeamToDelete(null);
           }}
           onConfirm={handleDeleteTeam}
-          title="Confirmar Exclusão"
-          description="Tem certeza que deseja excluir esta equipe? Todos os membros serão removidos."
-          confirmText="Excluir"
-          cancelText="Cancelar"
+          title={t('teams.deleteTeam')}
+          description={t('teams.deleteTeamDescription')}
+          confirmText={t('teams.delete')}
+          cancelText={t('teams.cancel')}
           variant="destructive"
         />
       </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { useAuthStore } from '@/store/authStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -68,6 +68,7 @@ const localeMap: { [key: string]: Locale } = {
 
 export default function ReportsPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const { user, updateUser } = useAuthStore();
   const [report, setReport] = useState<MonthlyReport | null>(null);
@@ -214,7 +215,7 @@ export default function ReportsPage() {
     );
   }
 
-  const currentLocale = localeMap[user.language || 'pt'] || ptBR;
+  const currentLocale = localeMap[locale || 'pt'] || ptBR;
 
   return (
     <Layout>

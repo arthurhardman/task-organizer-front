@@ -260,7 +260,7 @@ export default function PaymentPage() {
               
               <div className="space-y-3">
                 <div className="pb-2 border-b border-border/50">
-                  <p className="text-xs text-muted-foreground mb-2">Tudo do Básico +</p>
+                  <p className="text-xs text-muted-foreground mb-2">{t('payment.allFromBasic')}</p>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
@@ -280,11 +280,11 @@ export default function PaymentPage() {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <X className="w-4 h-4 text-red-500 flex-shrink-0" />
-                  <span className="line-through">Chamados e Equipes</span>
+                  <span className="line-through">{t('payment.ticketsAndTeams')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <X className="w-4 h-4 text-red-500 flex-shrink-0" />
-                  <span className="line-through">Gerenciamento de usuários</span>
+                  <span className="line-through">{t('payment.userManagement')}</span>
                 </div>
               </div>
 
@@ -321,8 +321,8 @@ export default function PaymentPage() {
                   <Building2 className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl">Plano Business</CardTitle>
-                  <CardDescription className="text-sm mt-1">Para empresas</CardDescription>
+                  <CardTitle className="text-xl">{t('payment.businessPlan')}</CardTitle>
+                  <CardDescription className="text-sm mt-1">{t('payment.forCompanies')}</CardDescription>
                 </div>
               </div>
             </CardHeader>
@@ -334,19 +334,19 @@ export default function PaymentPage() {
               
               <div className="space-y-3">
                 <div className="pb-2 border-b border-border/50">
-                  <p className="text-xs text-muted-foreground mb-2">Tudo do Premium +</p>
+                  <p className="text-xs text-muted-foreground mb-2">{t('payment.allFromPremium')}</p>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span><strong>Chamados e Equipes</strong></span>
+                  <span><strong>{t('payment.ticketsAndTeams')}</strong></span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span><strong>Até 20 usuários</strong></span>
+                  <span><strong>{t('payment.upTo20Users')}</strong></span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span><strong>Gerenciamento de usuários</strong></span>
+                  <span><strong>{t('payment.userManagement')}</strong></span>
                 </div>
               </div>
 
@@ -363,7 +363,7 @@ export default function PaymentPage() {
                 ) : (
                   <span className="flex items-center gap-2">
                     <ExternalLink className="w-4 h-4" />
-                    Assinar Plano Business
+                    {t('payment.signBusinessPlan')}
                   </span>
                 )}
               </Button>

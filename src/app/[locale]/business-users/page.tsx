@@ -213,12 +213,12 @@ export default function BusinessUsersPage() {
       <div className="space-y-8 animate-in">
         <div>
           <h1 className="text-4xl font-bold gradient-text mb-2">
-            {businessInfo?.isSystemAdmin ? 'Gerenciar Usuários do Sistema' : 'Gerenciar Usuários'}
+            {businessInfo?.isSystemAdmin ? t('businessUsers.titleSystem') : t('businessUsers.title')}
           </h1>
           <p className="text-muted-foreground">
             {businessInfo?.isSystemAdmin 
-              ? 'Visualize todos os usuários do sistema' 
-              : 'Gerencie os usuários da sua empresa'}
+              ? t('businessUsers.descriptionSystem')
+              : t('businessUsers.description')}
           </p>
         </div>
 
@@ -234,33 +234,33 @@ export default function BusinessUsersPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Users className="w-5 h-5 text-primary" />
-                    {businessInfo.isSystemAdmin ? 'Informações do Sistema' : 'Informações da Empresa'}
+                    {businessInfo.isSystemAdmin ? t('businessUsers.systemInfo') : t('businessUsers.companyInfo')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {businessInfo.isSystemAdmin ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm text-muted-foreground">Total de Usuários</p>
+                        <p className="text-sm text-muted-foreground">{t('businessUsers.totalUsers')}</p>
                         <p className="text-2xl font-bold">{businessInfo.currentUserCount}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Total de Empresas</p>
+                        <p className="text-sm text-muted-foreground">{t('businessUsers.totalCompanies')}</p>
                         <p className="text-2xl font-bold">{businessInfo.totalBusinesses || 0}</p>
                       </div>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
-                        <p className="text-sm text-muted-foreground">Usuários Atuais</p>
+                        <p className="text-sm text-muted-foreground">{t('businessUsers.currentUsers')}</p>
                         <p className="text-2xl font-bold">{businessInfo.currentUserCount}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Limite Base</p>
+                        <p className="text-sm text-muted-foreground">{t('businessUsers.baseLimit')}</p>
                         <p className="text-2xl font-bold">{businessInfo.max_users}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Total Permitido</p>
+                        <p className="text-sm text-muted-foreground">{t('businessUsers.totalAllowed')}</p>
                         <p className="text-2xl font-bold">{businessInfo.totalAllowed}</p>
                       </div>
                     </div>
@@ -273,13 +273,15 @@ export default function BusinessUsersPage() {
                           <div className="flex items-center gap-2 mb-2">
                             <AlertCircle className="w-5 h-5 text-yellow-500" />
                             <p className="font-semibold text-yellow-500">
-                              {businessInfo.usersOverLimit} usuário(s) acima do limite base
+                              {t('businessUsers.usersOverLimit', { count: businessInfo.usersOverLimit })}
                             </p>
                           </div>
                           {businessInfo.extraUsersNeeded > 0 && (
                             <p className="text-sm text-muted-foreground">
-                              É necessário adicionar {businessInfo.extraUsersNeeded} usuário(s) extra.
-                              Custo: R$ {businessInfo.extraUsersCost.toFixed(2)}
+                              {t('businessUsers.needExtraUsers', { 
+                                count: businessInfo.extraUsersNeeded,
+                                cost: businessInfo.extraUsersCost.toFixed(2)
+                              })}
                             </p>
                           )}
                         </div>
@@ -290,11 +292,11 @@ export default function BusinessUsersPage() {
                           <div className="flex items-center gap-2 mb-2">
                             <X className="w-5 h-5 text-red-500" />
                             <p className="font-semibold text-red-500">
-                              Limite de usuários atingido
+                              {t('businessUsers.limitReached')}
                             </p>
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            Adicione mais usuários extras para permitir novos registros.
+                            {t('businessUsers.addMoreUsersMessage')}
                           </p>
                         </div>
                       )}
@@ -305,14 +307,14 @@ export default function BusinessUsersPage() {
                           className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white"
                         >
                           <UserPlus className="w-4 h-4 mr-2" />
-                          Convidar Usuário
+                          {t('businessUsers.inviteUser')}
                         </Button>
                         <Button
                           onClick={() => setShowAddExtraModal(true)}
                           variant="outline"
                           className="border-primary text-primary hover:bg-primary/10"
                         >
-                          Adicionar Usuários Extras
+                          {t('businessUsers.addExtraUsers')}
                         </Button>
                       </div>
                     </>
@@ -372,7 +374,7 @@ export default function BusinessUsersPage() {
             <Card className="border-border/50 bg-gradient-to-br from-card to-card/50">
               <CardHeader>
                 <CardTitle>
-                  {businessInfo?.isSystemAdmin ? 'Todos os Usuários do Sistema' : 'Usuários da Empresa'}
+                  {businessInfo?.isSystemAdmin ? t('businessUsers.allSystemUsers') : t('businessUsers.companyUsers')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -387,12 +389,12 @@ export default function BusinessUsersPage() {
                           <p className="font-semibold">{businessUser.name}</p>
                           {businessUser.is_admin && (
                             <span className="px-2 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-500">
-                              Admin
+                              {t('businessUsers.admin')}
                             </span>
                           )}
                           {businessUser.is_business && (
                             <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-500/20 text-green-500">
-                              Business
+                              {t('businessUsers.business')}
                             </span>
                           )}
                         </div>
@@ -401,13 +403,13 @@ export default function BusinessUsersPage() {
                           {businessInfo?.isSystemAdmin && businessUser.business_name && (
                             <span className="mr-2">Empresa: {businessUser.business_name}</span>
                           )}
-                          {businessUser.team_count} equipe(s) • Registrado em{' '}
+                          {businessUser.team_count} {t('businessUsers.teams')} • {t('businessUsers.registeredOn')}{' '}
                           {new Date(businessUser.created_at).toLocaleDateString('pt-BR')}
                         </p>
                       </div>
                       {businessInfo?.isSystemAdmin ? (
                         // Admin do sistema não pode remover usuários
-                        <span className="text-xs text-muted-foreground">Admin do Sistema</span>
+                        <span className="text-xs text-muted-foreground">{t('businessUsers.systemAdmin')}</span>
                       ) : (
                         businessUser.id !== user.id && !businessUser.is_admin && (
                           <Button
@@ -427,12 +429,12 @@ export default function BusinessUsersPage() {
                   ))}
                   {users.length === 0 && (!businessInfo?.isSystemAdmin && invitations.length === 0) && (
                     <p className="text-center text-muted-foreground py-8">
-                      Nenhum usuário encontrado. Convide usuários para começar!
+                      {t('businessUsers.noUsersFound')}
                     </p>
                   )}
                   {users.length === 0 && businessInfo?.isSystemAdmin && (
                     <p className="text-center text-muted-foreground py-8">
-                      Nenhum usuário encontrado no sistema.
+                      {t('businessUsers.noSystemUsersFound')}
                     </p>
                   )}
                 </div>
@@ -447,7 +449,7 @@ export default function BusinessUsersPage() {
             <Card className="bg-card/95 backdrop-blur-xl border-border/50 shadow-2xl max-w-md w-full m-4 animate-slide-up">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>Adicionar Usuários Extras</CardTitle>
+                  <CardTitle>{t('businessUsers.addExtraUsersTitle')}</CardTitle>
                   <Button
                     variant="ghost"
                     size="icon"
